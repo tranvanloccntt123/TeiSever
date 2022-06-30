@@ -22,9 +22,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //import controller api v1
 
 use App\Http\Controllers\API\v1\Application as ApplicationControllerv1;
+use App\Http\Controllers\API\v1\PMCategory as PMCategoryControllerv1;
 
 Route::prefix("v1")->group(function(){
     Route::prefix("application")->group(function(){
         Route::post("create", [ApplicationControllerv1::class, "create"]);
+    });
+    Route::prefix("pm")->group(function(){
+        Route::prefix("category")->group(function(){
+            Route::post('create', [PMCategoryControllerv1::class, "create"]);
+        });
     });
 });
