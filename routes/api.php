@@ -25,6 +25,6 @@ use App\Http\Controllers\API\v1\Application as ApplicationControllerv1;
 
 Route::prefix("v1")->group(function(){
     Route::prefix("application")->group(function(){
-        Route::post("insert", [ApplicationControllerv1::class, "create"]);
+        Route::post("create", [ApplicationControllerv1::class, "create"]);
     });
 });
