@@ -32,6 +32,7 @@ Route::prefix("v1")->group(function(){
         Route::prefix("category")->group(function(){
             Route::get('/', [PMCategoryControllerv1::class, "get"]);
             Route::post('create', [PMCategoryControllerv1::class, "create"]);
+            Route::post('join',[PMCategoryControllerv1::class, "joinApplication"]);
         });
     });
 });
