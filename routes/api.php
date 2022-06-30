@@ -17,3 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+//import controller api v1
+
+use App\Http\Controllers\API\v1\Application as ApplicationControllerv1;
+
+Route::prefix("v1")->group(function(){
+    Route::prefix("application")->group(function(){
+        Route::post("insert", [ApplicationControllerv1::class, "create"]);
+    });
+});
