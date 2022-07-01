@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 use App\Http\Controllers\API\v1\Application as ApplicationControllerv1;
 use App\Http\Controllers\API\v1\PMCategory as PMCategoryControllerv1;
+use App\Http\Controllers\API\v1\PMProduct as PMProductControllerv1;
 
 Route::prefix("v1")->group(function(){
     Route::prefix("application")->group(function(){
@@ -33,6 +34,11 @@ Route::prefix("v1")->group(function(){
             Route::get('/', [PMCategoryControllerv1::class, "get"]);
             Route::post('create', [PMCategoryControllerv1::class, "create"]);
             Route::post('join',[PMCategoryControllerv1::class, "joinApplication"]);
+        });
+        Route::prefix("product")->group(function(){
+            Route::get("/", [PMProductControllerv1::class, "get"]);
+            Route::get("/paginate",[PMProductControllerv1::class, "paginate"]);
+            Route::post("create", [PMProductControllerv1::class, "create"]);
         });
     });
 });
