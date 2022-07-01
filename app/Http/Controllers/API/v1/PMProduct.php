@@ -43,6 +43,6 @@ class PMProduct extends Controller
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
-        return PMProductModell::where("application_id",'=',$request->application_id)->paginate(10);
+        return PMProductModell::where("application_id",'=',$request->application_id)->paginate(12);
     }
 }
