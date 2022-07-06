@@ -17,7 +17,8 @@ class modal extends Component
     public $method;
     public $action;
     public $enctype;
-    public function __construct($title, $modalTitle, $id, $enctype = "", $method = "", $action = "")
+    public $classOpenButton;
+    public function __construct($title, $modalTitle, $id, $enctype = "", $method = "", $action = "", $classOpenButton = "btn btn-link")
     {
         //
         $this->id = $id;
@@ -26,6 +27,7 @@ class modal extends Component
         $this->enctype = $enctype;
         $this->method = $method;
         $this->action = $action;
+        $this->classOpenButton = $classOpenButton;
     }
 
     /**

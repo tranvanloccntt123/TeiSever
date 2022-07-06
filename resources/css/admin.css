@@ -1,7 +1,7 @@
 /* #ffffff • #d0e1f9 •  • #283655 • #1e1f26 */
 .bg-admin-nav{
     background-color: #4d648d;
-    z-index: 9999;
+    z-index: 3;
 }
 
 .bg-admin-nav a, .bg-admin-nav .navbar-brand:hover{
@@ -57,6 +57,11 @@
 
 #nav-left-side{
     display: none;
+}
+
+#alter{
+    width: 100%;
+    max-width: 400px;
 }
 
 

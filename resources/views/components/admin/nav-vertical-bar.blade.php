@@ -1,7 +1,7 @@
 <div id="nav-left-side" class="col-12 col-md-4 col-lg-2">
     <ul>
         <li>
-            <a class="active" href="">Dashboard</a>
+            <a class="active" href="">Ứng dụng</a>
         </li>
         <li>
             <a class="" href="">List 1</a>

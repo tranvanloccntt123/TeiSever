@@ -11,8 +11,15 @@ class Config extends Controller
     public $subTitle = "";
     public $data = [];
     public $layouts = [];
-    public function resource(){
-        return view("admin.index", [
+    public function resource($isAppManager = FALSE){
+        if($isAppManager == FALSE)
+            return view("admin.index", [
+                "title" => $this->title,
+                "subTitle" => $this->subTitle,
+                "layouts" => $this->layouts,
+                "data" => $this->data
+            ]);
+        return view("admin.app-manager", [
             "title" => $this->title,
             "subTitle" => $this->subTitle,
             "layouts" => $this->layouts,

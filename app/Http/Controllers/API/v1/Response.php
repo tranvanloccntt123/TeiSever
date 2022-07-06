@@ -7,17 +7,20 @@ use Illuminate\Http\Request;
 
 class Response extends Controller
 {
+    public static $SUCCESS = "success";
+    public static $FAIL = "Fail";
+
     public static function FAIL($messages){
         return [
-            "status" => "Fail",
+            "status" => Response::$FAIL,
             "message" => $messages
         ];
     }
 
     public static function SUCCESS($message){
         return [
-            "status" => "Success",
-            "message" => $mssage
+            "status" => Response::$SUCCESS,
+            "message" => $message
         ];
     }
 }
