@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('application_modules', function (Blueprint $table) {
             $table->id();
+            $table->string("name");
+            $table->double("price")->default(0);
             $table->timestamps();
         });
     }
