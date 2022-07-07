@@ -9,7 +9,7 @@ class Response extends Controller
 {
     public static $SUCCESS = "success";
     public static $FAIL = "Fail";
-    
+
     public static function FAIL($messages){
         return [
             "status" => Response::$FAIL,
@@ -28,6 +28,6 @@ class Response extends Controller
         return [
             "status" => Response::$SUCCESS,
             "data" => $data
-        ]
+        ];
     }
 }
