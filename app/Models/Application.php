@@ -9,4 +9,7 @@ class Application extends Model
 {
     use HasFactory;
     protected $table = "applications";
+    public function modules(){
+        return $this->belongsToMany(Module::class)->using(SelectModule::class);
+    }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Application as ApplicationModel;
 use App\Models\ApplicationType as ApplicationTypeModel;
+use App\Models\Module as ModuleModel;
+use App\Models\SelectModule as SelectModuleModel;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\Admin\Config;
 use App\Http\Controllers\API\v1\Application as ApplicationAPI;
@@ -43,6 +45,23 @@ class Applications extends Controller
     }
     public function manager(Request $request, $id){
         $config = new Config();
+        $application = ApplicationModel::find($id);
+        if(!isset($application)) return redirect()->back()->withErrors(["Không thể truy cập ứng dụng"]);
+        $config->title = $application["name"];
+        $config->layouts = [
+            "application-manager"
+        ];
+        $config->data = [
+            "app" => $application,
+            'types' => ApplicationTypeModel::get(),
+            'modules' => ModuleModel::where("type_id","=", $application->type_id)->orWhere("type_id","=", NULL)->get(),
+            'select_modules' => ApplicationModel::find($id)->modules()->get()
+        ];
         return $config->resource(TRUE);
+    }
+
+    public function edit(Request $request){
+        $result = (new ApplicationAPI())->edit($request);
+        return $this->returnBack($result);
     }
 }
