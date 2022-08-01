@@ -13,8 +13,8 @@ class PMProduct extends Controller
     public function create(Request $request){
         $rule = ['name' => 'required', "category_id" => "required"];
         $messages = [
-            'name.required' => 'Application ID is required',
-            "category_id.required" => "Category ID is requried"
+            'name.required' => 'Tên sản phẩm không được bỏ trống',
+            "category_id.required" => "Danh mục sản phẩm không được bỏ trống"
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
@@ -25,12 +25,12 @@ class PMProduct extends Controller
             "description" => $request->has("description")? $request->description : 0,
             "options" => $request->has("options")? $request->options : ""
         ]);
-        return APIResponse::SUCCESS("Product is created");
+        return APIResponse::SUCCESS("Sản phẩm đã được thêm");
     }
     public function get(Request $request){
         $rule = ["application_id" => "required"];
         $messages = [
-            'application_id.required' => "Application ID is required"
+            'application_id.required' => "Application ID không được bỏ trống"
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
@@ -39,7 +39,7 @@ class PMProduct extends Controller
     public function paginate(Request $request){
         $rule = ["application_id" => "required"];
         $messages = [
-            'application_id.required' => "Application ID is required"
+            'application_id.required' => "Application ID không được bỏ trống"
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());

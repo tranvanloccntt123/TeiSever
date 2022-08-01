@@ -13,7 +13,7 @@ class PMCategory extends Controller
     public function get(Reqeust $request){
          $rule = ['application_id' => 'required'];
          $messages = [
-            'application_id.required' => 'Application ID is required'
+            'application_id.required' => 'Application ID is không được bỏ trống.'
          ];
          $validator = Validator::make($request->all(), $rule, $messages);
          if($validator->fails()) return APIResponse::FAIL($validator->errors());
@@ -22,28 +22,28 @@ class PMCategory extends Controller
     public function create(Request $request){
         $rule = ['name' => 'required|max:255'];
         $messages = [
-            'name.required' => 'Name is required',
-            'name.max:255' => "Name's length is 255"
+            'name.required' => 'Bạn cần điền tên danh mục',
+            'name.max:255' => 'Tên danh mục tối đa 255'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
-        PMCategoryModel::insert(['name' => $request->name, 'description' => $request->has("description")? $request->description : ""]);
-        return APIResponse::SUCCESS("Category is created");
+        PMCategoryModel::insert(['name' => $request->name, 'description' => $request->has('description')? $request->description : '']);
+        return APIResponse::SUCCESS('Danh mục đã được khởi tạo');
     }
     public function joinApplication(Request $request){
         $rule = ['id' => 'required', 'application_id' => 'required'];
         $messages = [
-            'id.required' => 'Category ID is required',
-            'application_id.required' => 'Application ID is required'
+            'id.required' => 'Danh mục ID không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $category = PMcategoryModel::find($request->id);
-        if(!isset($category)) return APIResponse::FAIL("Category not found");
+        if(!isset($category)) return APIResponse::FAIL('Không tìm thấy danh mục');
         $listArray = explode($category['applications'], ',');
-        if(array_search($request->application_id, $listArray) >= 0) return APIResponse::FAIL("Category is exists");
-        $category->applications = $category->applications.",".$request->application_id;
+        if(array_search($request->application_id, $listArray) >= 0) return APIResponse::FAIL('Danh mục đã tồn tại');
+        $category->applications = $category->applications.','.$request->application_id;
         $category->save();
-        return APIResponse::SUCCESS("Category is inserted");
+        return APIResponse::SUCCESS('Danh mục đã được khởi tạo');
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
+| is assigned the 'api' middleware group. Enjoy building your API!
 |
 */
 
@@ -24,21 +24,32 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 use App\Http\Controllers\API\v1\Application as ApplicationControllerv1;
 use App\Http\Controllers\API\v1\PMCategory as PMCategoryControllerv1;
 use App\Http\Controllers\API\v1\PMProduct as PMProductControllerv1;
-
-Route::prefix("v1")->group(function(){
-    Route::prefix("application")->group(function(){
-        Route::post("create", [ApplicationControllerv1::class, "create"]);
+use App\Http\Controllers\API\v1\Authentication as Authenticationv1;
+use App\Http\Controllers\API\v1\Chat as Chatv1;
+Route::prefix('v1')->group(function(){
+    Route::prefix('application')->group(function(){
+        Route::post('create', [ApplicationControllerv1::class, 'create']);
     });
-    Route::prefix("pm")->group(function(){
-        Route::prefix("category")->group(function(){
-            Route::get('/', [PMCategoryControllerv1::class, "get"]);
-            Route::post('create', [PMCategoryControllerv1::class, "create"]);
-            Route::post('join',[PMCategoryControllerv1::class, "joinApplication"]);
+    Route::prefix('pm')->group(function(){
+        Route::prefix('category')->group(function(){
+            Route::get('/', [PMCategoryControllerv1::class, 'get']);
+            Route::post('create', [PMCategoryControllerv1::class, 'create']);
+            Route::post('join',[PMCategoryControllerv1::class, 'joinApplication']);
         });
-        Route::prefix("product")->group(function(){
-            Route::get("/", [PMProductControllerv1::class, "get"]);
-            Route::get("/paginate",[PMProductControllerv1::class, "paginate"]);
-            Route::post("create", [PMProductControllerv1::class, "create"]);
+        Route::prefix('product')->group(function(){
+            Route::get('/', [PMProductControllerv1::class, 'get']);
+            Route::get('/paginate',[PMProductControllerv1::class, 'paginate']);
+            Route::post('create', [PMProductControllerv1::class, 'create']);
         });
+    });
+    Route::middleware('auth:sanctum')->prefix('chat')->group(function(){
+        Route::get('list', [Chatv1::class, 'getListMessage']);
+        Route::get('messages', [Chatv1::class, 'getCurrentMessages']);
+        Route::get('detail', [Chatv1::class, 'getDetailMessage']);
+    });
+
+    Route::prefix('auth')->group(function(){
+        Route::post('register', [Authenticationv1::class, 'createAccount'])->name('api.auth.register');
+        Route::post('login', [Authenticationv1::class, 'createToken'])->name('api.auth.login');
     });
 });
