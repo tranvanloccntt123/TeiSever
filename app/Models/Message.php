@@ -9,4 +9,11 @@ class Message extends Model
 {
     use HasFactory;
     protected $table = "messages";
+    protected $fillable = [
+        'user_id',
+        'type',
+        'UUID',
+        'content',
+        'group_message_id'
+    ];
 }
