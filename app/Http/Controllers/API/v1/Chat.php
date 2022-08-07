@@ -120,6 +120,7 @@ class Chat extends Controller
                     'content' => $request->content,
                     'UUID' => $UUID
                 ]);
+                break;
             }
             case MessageType::image->name: {
                 $path = 'public/message/'.$request->id; 
@@ -132,6 +133,7 @@ class Chat extends Controller
                     'content' => $path.'/'.$name,
                     'UUID' => $UUID
                 ]);
+                break;
             }
         }
         return APIResponse::SUCCESS(['UUID' => $UUID]);
