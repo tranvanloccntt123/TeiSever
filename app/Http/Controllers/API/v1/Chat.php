@@ -71,8 +71,10 @@ class Chat extends Controller
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(["Không tìm thấy thông tin của người dùng"]);
-        $data = MessageModel::leftJoin('users','users.id', '=', 'messages.user_id')->select('messages.*', 'users.name as userName')->where('group_message_id', '=', $request->id)->orderBy('created_at', 'DESC')->paginate(15);
-        return APIResponse::SUCCESS(new ChatCollection($data));
+        $data = MessageModel::leftJoin('users','users.id', '=', 'messages.user_id')->select('messages.*', 'users.name as userName')->where('group_message_id', '=', $request->id)->orderBy('created_at', 'DESC');
+        if($request->has('left_id'))
+         $data = $data->where('messages.id', '<', $request->left_id);
+        return APIResponse::SUCCESS(new ChatCollection($data->paginate(15)));
     }
 
     public function getDetailMessage(Request $request){

@@ -14,6 +14,7 @@ class ChatResource extends JsonResource
      */
     public function toArray($request)
     {
+        
         return [
             'id' => $this->id,
             'group_message_id' => $this->group_message_id,
@@ -23,7 +24,9 @@ class ChatResource extends JsonResource
             'user' => [
                 'id' => $this->user_id,
                 'name' => $this->userName
-            ]
+            ],
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }
