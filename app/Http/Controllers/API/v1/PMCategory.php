@@ -39,9 +39,9 @@ class PMCategory extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $category = PMcategoryModel::find($request->id);
-        if(!isset($category)) return APIResponse::FAIL('Không tìm thấy danh mục');
+        if(!isset($category)) return APIResponse::FAIL(['category' => ['Không tìm thấy danh mục']]);
         $listArray = explode($category['applications'], ',');
-        if(array_search($request->application_id, $listArray) >= 0) return APIResponse::FAIL('Danh mục đã tồn tại');
+        if(array_search($request->application_id, $listArray) >= 0) return APIResponse::FAIL(['category' => ['Danh mục đã tồn tại']]);
         $category->applications = $category->applications.','.$request->application_id;
         $category->save();
         return APIResponse::SUCCESS('Danh mục đã được khởi tạo');

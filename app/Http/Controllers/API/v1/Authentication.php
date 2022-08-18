@@ -27,7 +27,7 @@ class Authentication extends Controller
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $checkUsername = UserModel::where('username','LIKE', $request->application_id.'.'.$request->username)->first();
         if(isset($checkUsername))
-         return APIResponse::FAIL(['Tài khoản này đã được đăng kí']);
+         return APIResponse::FAIL(['username' => ['Tài khoản này đã được đăng kí']]);
 
         UserModel::create([
             'name' => $request->name,
@@ -58,6 +58,6 @@ class Authentication extends Controller
                 'token' => $token
             ]);
         }
-        return APIResponse::FAIL(['Đăng nhập thất bại']);
+        return APIResponse::FAIL(['sign up' => ['Đăng nhập thất bại']]);
     }
 }

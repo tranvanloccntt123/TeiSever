@@ -38,7 +38,7 @@ class Chat extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(["Không tìm thấy thông tin của người dùng"]);
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $listGroup = GroupMessageUserModel::where('group_message_user.user_id','=',$user->id)
             ->join('group_message','group_message.id', '=', 'group_message_user.group_message_id')
             ->join('users','users.id','=','group_message_user.user_id')
@@ -70,7 +70,7 @@ class Chat extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(["Không tìm thấy thông tin của người dùng"]);
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $data = MessageModel::leftJoin('users','users.id', '=', 'messages.user_id')->select('messages.*', 'users.name as userName')->where('group_message_id', '=', $request->id)->orderBy('created_at', 'DESC');
         if($request->has('left_id'))
          $data = $data->where('messages.id', '<', $request->left_id);
@@ -89,9 +89,9 @@ class Chat extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(["Không tìm thấy thông tin của người dùng"]);
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $data = MessageModel::join('users', 'users.id', '=', 'messages.user_id')->select('messages.*', 'users.name as usertName')->where('UUID', 'LIKE',$request->UUID)->first();
-        if(!isset($data)) return APIResponse::FAIL(['id' => "Không tìm thấy ID tin nhắn"]);
+        if(!isset($data)) return APIResponse::FAIL(['id' => ["Không tìm thấy ID tin nhắn"]]);
         return APIResponse::SUCCESS(new ChatResource($data));
     }
 
@@ -111,7 +111,7 @@ class Chat extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(["Không tìm thấy thông tin của người dùng"]);
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $UUID = UUID::guidv4();
         switch($request->type){
             case MessageType::text->name: {

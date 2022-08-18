@@ -22,7 +22,7 @@ class Application extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         ApplicationModel::insert(['name' => $request->name, 'price' => $request->has("price")? $request->price : 0, 'type_id' => $request->type_id]);
-        return APIResponse::SUCCESS("Ứng dụng đã được đăng kí");
+        return APIResponse::SUCCESS("Ứng dụng đã được đăng kí", true);
     }
 
     public function delete(Request $request){
@@ -38,12 +38,12 @@ class Application extends Controller
 
     public function detail($id){
         $application = ApplicationModel::find($id);
-        if(!isset($application)) return APIResponse::FAIL(["Không thể truy cập ứng dụng"]);
+        if(!isset($application)) return APIResponse::FAIL(['application' => ["Không thể truy cập ứng dụng"]]);
         return APIResponse::DATA($application);
     }
 
     public function edit(Request $request){
-        if(!$request->has("id")) return APIResponse::FAIL(["Không thể truy cập ứng dụng"]);
+        if(!$request->has("id")) return APIResponse::FAIL(['application' => ["Không thể truy cập ứng dụng"]]);
         $detail = ApplicationModel::find($request->id);
         $detail->type_id = $request->has("type_id")? $request->type_id : $detail->type_id;
         $detail->note = $request->has("note")? $request->note : $detail->note;
