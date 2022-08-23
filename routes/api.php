@@ -26,6 +26,7 @@ use App\Http\Controllers\API\v1\PMCategory as PMCategoryControllerv1;
 use App\Http\Controllers\API\v1\PMProduct as PMProductControllerv1;
 use App\Http\Controllers\API\v1\Authentication as Authenticationv1;
 use App\Http\Controllers\API\v1\Chat as Chatv1;
+use App\Http\Controllers\API\v1\Post as Postv1;
 Route::prefix('v1')->group(function(){
     Route::prefix('application')->group(function(){
         Route::post('create', [ApplicationControllerv1::class, 'create']);
@@ -47,6 +48,11 @@ Route::prefix('v1')->group(function(){
         Route::get('messages', [Chatv1::class, 'getCurrentMessages']);
         Route::get('detail', [Chatv1::class, 'getDetailMessage']);
         Route::post('send', [Chatv1::class, 'sendMessage']);
+    });
+
+    Route::middleware('auth:sanctum')->prefix('post')->group(function(){
+        Route::post('create', [Postv1::class, 'create']);
+        Route::post('list', [Postv1::class, 'list']);
     });
 
     Route::prefix('auth')->group(function(){
