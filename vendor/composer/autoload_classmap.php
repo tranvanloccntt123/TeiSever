@@ -15,6 +15,7 @@ return array(
     'App\\Http\\Controllers\\API\\v1\\PMCategory' => $baseDir . '/app/Http/Controllers/API/v1/PMCategory.php',
     'App\\Http\\Controllers\\API\\v1\\PMProduct' => $baseDir . '/app/Http/Controllers/API/v1/PMProduct.php',
     'App\\Http\\Controllers\\API\\v1\\Post' => $baseDir . '/app/Http/Controllers/API/v1/Post.php',
+    'App\\Http\\Controllers\\API\\v1\\Profile' => $baseDir . '/app/Http/Controllers/API/v1/Profile.php',
     'App\\Http\\Controllers\\API\\v1\\RelationShip' => $baseDir . '/app/Http/Controllers/API/v1/RelationShip.php',
     'App\\Http\\Controllers\\API\\v1\\Response' => $baseDir . '/app/Http/Controllers/API/v1/Response.php',
     'App\\Http\\Controllers\\Admin\\Applications' => $baseDir . '/app/Http/Controllers/Admin/Applications.php',

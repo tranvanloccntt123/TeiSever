@@ -23,7 +23,9 @@ class User extends Authenticatable
         'password',
         'level',
         'username',
-        'application_id'
+        'application_id',
+        'avatar',
+        'background'
     ];
 
     /**

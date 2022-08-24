@@ -514,6 +514,7 @@ class ComposerStaticInit150caed88666117ec972e41f69c95ec7
         'App\\Http\\Controllers\\API\\v1\\PMCategory' => __DIR__ . '/../..' . '/app/Http/Controllers/API/v1/PMCategory.php',
         'App\\Http\\Controllers\\API\\v1\\PMProduct' => __DIR__ . '/../..' . '/app/Http/Controllers/API/v1/PMProduct.php',
         'App\\Http\\Controllers\\API\\v1\\Post' => __DIR__ . '/../..' . '/app/Http/Controllers/API/v1/Post.php',
+        'App\\Http\\Controllers\\API\\v1\\Profile' => __DIR__ . '/../..' . '/app/Http/Controllers/API/v1/Profile.php',
         'App\\Http\\Controllers\\API\\v1\\RelationShip' => __DIR__ . '/../..' . '/app/Http/Controllers/API/v1/RelationShip.php',
         'App\\Http\\Controllers\\API\\v1\\Response' => __DIR__ . '/../..' . '/app/Http/Controllers/API/v1/Response.php',
         'App\\Http\\Controllers\\Admin\\Applications' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/Applications.php',
