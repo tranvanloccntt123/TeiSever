@@ -61,6 +61,13 @@ Route::prefix('v1')->group(function(){
         Route::post('/relation-ship', [RelationShipv1::class, 'create']);
     });
 
+    Route::middleware('auth:sanctum')->prefix('profile')->group(function(){
+        Route::prefix('change')->group(function(){
+            Route::post('avatar', [Profilev1::class, 'changeAvatar']);
+            Route::post('background', [Profilev1::class, 'changeBackground']);
+        });
+    });
+
     Route::prefix('auth')->group(function(){
         Route::post('register', [Authenticationv1::class, 'createAccount'])->name('api.auth.register');
         Route::post('login', [Authenticationv1::class, 'createToken'])->name('api.auth.login');
