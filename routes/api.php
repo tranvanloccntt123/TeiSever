@@ -20,13 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 //import controller api v1
-
 use App\Http\Controllers\API\v1\Application as ApplicationControllerv1;
 use App\Http\Controllers\API\v1\PMCategory as PMCategoryControllerv1;
 use App\Http\Controllers\API\v1\PMProduct as PMProductControllerv1;
 use App\Http\Controllers\API\v1\Authentication as Authenticationv1;
 use App\Http\Controllers\API\v1\Chat as Chatv1;
 use App\Http\Controllers\API\v1\Post as Postv1;
+use App\Http\Controllers\API\v1\Profile as Profilev1;
+use App\Http\Controllers\API\v1\RelationShip as RelationShipv1;
 Route::prefix('v1')->group(function(){
     Route::prefix('application')->group(function(){
         Route::post('create', [ApplicationControllerv1::class, 'create']);
@@ -53,6 +54,11 @@ Route::prefix('v1')->group(function(){
     Route::middleware('auth:sanctum')->prefix('post')->group(function(){
         Route::post('create', [Postv1::class, 'create']);
         Route::post('list', [Postv1::class, 'list']);
+    });
+
+    Route::middleware('auth:sanctum')->prefix('view-profile')->group(function(){
+        Route::get('/visit', [Profilev1::class, 'viewProfile']);
+        Route::post('/relation-ship', [RelationShipv1::class, 'create']);
     });
 
     Route::prefix('auth')->group(function(){
