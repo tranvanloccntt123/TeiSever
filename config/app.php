@@ -194,7 +194,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        /**
+         * Firebase Services
+         */
+        Kreait\Laravel\Firebase\ServiceProvider::class,
     ],
 
     /*

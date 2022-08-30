@@ -73,3 +73,9 @@ Route::prefix('v1')->group(function(){
         Route::post('login', [Authenticationv1::class, 'createToken'])->name('api.auth.login');
     });
 });
+
+
+use App\Http\Controllers\FirebaseController;
+Route::prefix('firebase')->group(function(){
+    Route::get('test', [FirebaseController::class, 'test']);
+});
