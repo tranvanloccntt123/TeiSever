@@ -66,6 +66,10 @@ Route::prefix('v1')->group(function(){
             Route::post('avatar', [Profilev1::class, 'changeAvatar']);
             Route::post('background', [Profilev1::class, 'changeBackground']);
         });
+
+        Route::prefix('relation')->group(function(){
+            Route::get('list', [RelationShipv1::class, 'getList']);
+        });
     });
 
     Route::prefix('auth')->group(function(){
