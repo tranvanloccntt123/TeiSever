@@ -15,14 +15,13 @@ class Profile extends Controller
     public function viewProfile(Request $request){
         $rule = [
             'application_id' => 'required',
-            'user_id' => 'required'
         ];
         $messages = [
             'application_id.required' => 'Application ID is không được bỏ trống',
-            'user_id.required' => 'Đối tượng không được để trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user_id = $request->has('user_id')? $request->user_id : $request->user()->id;
         $checkUserApplication = UserModel::find($request->user_id);
         if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
         $posts = PostModel::where('user_id', '=', $request->user_id)->count();
@@ -31,6 +30,10 @@ class Profile extends Controller
             'posts' => $posts,
             'friends' => $friends
         ]);
+    }
+
+    public function getProfile(Request $request){
+
     }
 
     public function changeAvatar(Request $request){
