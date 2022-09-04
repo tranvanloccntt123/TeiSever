@@ -56,19 +56,17 @@ Route::prefix('v1')->group(function(){
         Route::post('list', [Postv1::class, 'list']);
     });
 
-    Route::middleware('auth:sanctum')->prefix('view-profile')->group(function(){
-        Route::get('/visit', [Profilev1::class, 'viewProfile']);
-        Route::post('/relation-ship', [RelationShipv1::class, 'create']);
-    });
-
     Route::middleware('auth:sanctum')->prefix('profile')->group(function(){
         Route::prefix('change')->group(function(){
             Route::post('avatar', [Profilev1::class, 'changeAvatar']);
             Route::post('background', [Profilev1::class, 'changeBackground']);
         });
 
+        Route::get('/visit', [Profilev1::class, 'viewProfile']);
+
         Route::prefix('relation')->group(function(){
             Route::get('list', [RelationShipv1::class, 'getList']);
+            Route::post('request', [RelationShipv1::class, 'create']);
         });
     });
 

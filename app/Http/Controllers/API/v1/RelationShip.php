@@ -15,30 +15,48 @@ enum StatusType{
     case cancel;
 }
 
-function getStatus(StatusType $status){
-    switch($status){
-        case StatusType::request: return 0;
-        case StatusType::confirm: return 1;
-        case StatusType::cancel: return -1;
-    }
-}
-
 class RelationShip extends Controller
 {
     //
     public function create(Request $request){
         $rule = [
             'application_id' => 'required',
-            'friend' => 'required'
+            'friend' => 'required',
+            'status' => 'required'
         ];
         $messages = [
             'application_id.required' => 'Application ID is không được bỏ trống',
-            'friend.required' => 'Đối tượng không được để trống'
+            'friend.required' => 'Đối tượng không được để trống',
+            'status.required' => 'Trạng thái không được để trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
-        $checkUserApplication = User::find($friend);
-        if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->appication_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
+        $user = $request->user();
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $checkUserApplication = UserModel::find($request->friend);
+        if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
+        $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where('friend', '=', $request->friend)->first();
+        if(isset($findRelationShip)) {
+            $findRelationShip->status = $this->getStatus($request->status);
+            $findRelationShip->save();
+            $findRevertRelationShip = RelationShipModel::where('user_id', '=', $request->friend)->where('friend', '=', $user->id)->first();
+            $findRevertRelationShip->status = $this->getStatus($request->status);
+            $findRevertRelationShip->save();
+        } else {
+            RelationShipModel::create([
+                'user_id' => $user->id,
+                'friend' => $reqeust->friend,
+                'application_id' => $request->application_id,
+                'status' => $this->getStatus($request->status),
+            ]);
+            RelationShipModel::create([
+                'user_id' => $reqeust->friend, 
+                'friend' => $user->id,
+                'application_id' => $request->application_id,
+                'status' => $this->getStatus($request->status),
+            ]);
+        }
+        return APIResponse::SUCCESS("Yêu cầu đã được xử lý thành công");
     }
 
     public function getList(Request $request){
@@ -53,7 +71,7 @@ class RelationShip extends Controller
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $list = RelationShipModel::where('relationships.user_id', '=', $user->id)
-            ->where('relationships.status', '=', getStatus(StatusType::confirm))
+            ->where('relationships.status', '=', $this->getStatus(StatusType::confirm->name))
             ->where('relationships.application_id', '=', $request->application_id)
             ->where('users.application_id', '=', $request->application_id)
             ->join('users', 'relationships.friend', '=', 'users.id')

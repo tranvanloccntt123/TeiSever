@@ -5,6 +5,10 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User as UserModel;
+use App\Models\Post as PostModel;
+use App\Models\RelationShip as RelationShipModel;
+use App\Http\Controllers\API\v1\Response as APIResponse;
+use Validator;
 class Profile extends Controller
 {
     //
@@ -19,10 +23,13 @@ class Profile extends Controller
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
-        $checkUserApplication = User::find('user_id');
-        if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->appication_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
-        return APIResponse::SUCCESS([
-            'profile' => $checkUserApplication
+        $checkUserApplication = UserModel::find($request->user_id);
+        if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
+        $posts = PostModel::where('user_id', '=', $request->user_id)->count();
+        $friends = RelationShipModel::where('user_id', '=', $request->user_id)->where('status', '=', $this->getStatus('confirm'))->count();return APIResponse::SUCCESS([
+            'profile' => $checkUserApplication,
+            'posts' => $posts,
+            'friends' => $friends
         ]);
     }
 
