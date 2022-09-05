@@ -25,7 +25,7 @@ class Profile extends Controller
         $checkUserApplication = UserModel::find($user_id);
         if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
         $posts = PostModel::where('user_id', '=', $request->user_id)->count();
-        $friends = RelationShipModel::where('user_id', '=', $request->user_id)->where('status', '=', $this->getStatusConfirm())->count();
+        $friends = RelationShipModel::where('user_id', '=', $user_id)->where('status', '=', $this->getStatusConfirm())->count();
         return APIResponse::SUCCESS([
             'profile' => $checkUserApplication,
             'posts' => $posts,
