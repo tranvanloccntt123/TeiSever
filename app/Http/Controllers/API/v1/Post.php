@@ -22,13 +22,13 @@ class Post extends Controller
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $UUID = UUID::guidv4();
-        PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'uuid' => $UUID]);
+        PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'UUID' => $UUID]);
         return APIResponse::SUCCESS(['UUID' => $UUID]);
     }
 
     public function list(Request $request){
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
-        return APIResponse::SUCCESS(PostModel::paginate(15));
+        return APIResponse::SUCCESS(PostModel::where('user_id', '=', $user->id)->paginate(15));
     }
 }

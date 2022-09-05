@@ -22,6 +22,7 @@ return array(
     'App\\Http\\Controllers\\Admin\\Config' => $baseDir . '/app/Http/Controllers/Admin/Config.php',
     'App\\Http\\Controllers\\Admin\\Modules' => $baseDir . '/app/Http/Controllers/Admin/Modules.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'App\\Http\\Controllers\\FirebaseController' => $baseDir . '/app/Http/Controllers/FirebaseController.php',
     'App\\Http\\Controllers\\UUID' => $baseDir . '/app/Http/Controllers/UUID.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
