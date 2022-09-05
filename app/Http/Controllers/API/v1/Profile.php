@@ -22,18 +22,15 @@ class Profile extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user_id = $request->has('user_id')? $request->user_id : $request->user()->id;
-        $checkUserApplication = UserModel::find($request->user_id);
+        $checkUserApplication = UserModel::find($user_id);
         if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
         $posts = PostModel::where('user_id', '=', $request->user_id)->count();
-        $friends = RelationShipModel::where('user_id', '=', $request->user_id)->where('status', '=', $this->getStatus('confirm'))->count();return APIResponse::SUCCESS([
+        $friends = RelationShipModel::where('user_id', '=', $request->user_id)->where('status', '=', $this->getStatusConfirm())->count();
+        return APIResponse::SUCCESS([
             'profile' => $checkUserApplication,
             'posts' => $posts,
             'friends' => $friends
         ]);
-    }
-
-    public function getProfile(Request $request){
-
     }
 
     public function changeAvatar(Request $request){

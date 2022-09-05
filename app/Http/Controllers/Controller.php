@@ -24,4 +24,16 @@ class Controller extends BaseController
             case StatusType::cancel->name: return -1;
         }
     }
+
+    public function getStatusConfirm(){
+        return 1;
+    }
+
+    public function getStatusRequest(){
+        return 0;
+    }
+
+    public function getStatusCancel(){
+        return -1;
+    }
 }
