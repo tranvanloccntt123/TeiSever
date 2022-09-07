@@ -13,8 +13,12 @@ class Post extends Controller
 {
     //
     public function create(Request $request){
-        $rule = ["content" => "required"];
+        $rule = [
+            "content" => "required",
+            "application_id" => "required"
+        ];
         $messages = [
+            'application_id.required' => 'Application ID is không được bỏ trống',
             'content.required' => 'Nôị dung không được bỏ trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -24,6 +28,24 @@ class Post extends Controller
         $UUID = UUID::guidv4();
         PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'UUID' => $UUID]);
         return APIResponse::SUCCESS(['UUID' => $UUID]);
+    }
+
+    public function delete(Request $request){
+        $rule = [
+            "application_id" => "required",
+            'uuid' => 'required'
+        ];
+        $messages = [
+            'application_id.required' => 'Application ID is không được bỏ trống',
+            'uuid.required' => 'UUID is không được bỏ trống',
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $find = PostModel::where('UUID', 'LIKE', $request->uuid)->first();
+        if(isset($find)) $find->delete();
+        return APIResponse::SUCCESS(['post' => 'Xóa thành công']);
     }
 
     public function list(Request $request){

@@ -53,6 +53,7 @@ Route::prefix('v1')->group(function(){
 
     Route::middleware('auth:sanctum')->prefix('post')->group(function(){
         Route::post('create', [Postv1::class, 'create']);
+        Route::post('delete', [Postv1::class, 'delete']);
         Route::get('list', [Postv1::class, 'list']);
     });
 
