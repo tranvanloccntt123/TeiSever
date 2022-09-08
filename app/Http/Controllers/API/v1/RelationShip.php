@@ -75,8 +75,9 @@ class RelationShip extends Controller
             ->where('relationships.application_id', '=', $request->application_id)
             ->where('users.application_id', '=', $request->application_id)
             ->join('users', 'relationships.friend', '=', 'users.id')
-            ->select('users.*')
-            ->paginate(15);
-        return APIResponse::SUCCESS($list);
+            ->select('users.*');
+        if($request->has('left_id'))
+            $list = $list->where('relationships.id', '<', $request->left_id);
+        return APIResponse::SUCCESS($list->paginate(15));
     }
 }
