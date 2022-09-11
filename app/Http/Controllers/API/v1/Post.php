@@ -9,6 +9,14 @@ use App\Models\Post as PostModel;
 use App\Http\Controllers\API\v1\Response as APIResponse;
 
 use Validator;
+
+enum MessageType{
+    case text;
+    case image;
+    case video;
+    case file;
+    case audio;
+}
 class Post extends Controller
 {
     //
@@ -26,7 +34,10 @@ class Post extends Controller
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $UUID = UUID::guidv4();
-        PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'UUID' => $UUID]);
+        $path = 'public/post/'.$user->id; 
+        $name = $UUID.'.jpg';
+        $request->file('media')->storeAs($path, $name);
+        PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'UUID' => $UUID, 'type' => $request->has('media')? 'image' : '', 'media' => $request->has('media')? $path.'/'.$name : '']);
         return APIResponse::SUCCESS(['UUID' => $UUID]);
     }
 
