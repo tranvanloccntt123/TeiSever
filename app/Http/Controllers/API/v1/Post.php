@@ -34,9 +34,11 @@ class Post extends Controller
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $UUID = UUID::guidv4();
-        $path = 'public/post/'.$user->id; 
-        $name = $UUID.'.jpg';
-        $request->file('media')->storeAs($path, $name);
+        if($request->has('media')){
+            $path = 'public/post/'.$user->id; 
+            $name = $UUID.'.jpg';
+            $request->file('media')->storeAs($path, $name);
+        }
         PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'UUID' => $UUID, 'type' => $request->has('media')? 'image' : '', 'media' => $request->has('media')? $path.'/'.$name : '']);
         return APIResponse::SUCCESS(['UUID' => $UUID]);
     }
