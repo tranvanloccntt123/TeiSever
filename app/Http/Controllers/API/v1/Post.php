@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\UUID;
 use Illuminate\Http\Request;
 use App\Models\Post as PostModel;
+use App\Models\User as UserModel;
 use App\Http\Controllers\API\v1\Response as APIResponse;
 
 use Validator;
@@ -63,8 +64,12 @@ class Post extends Controller
 
     public function list(Request $request){
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
-        $data = PostModel::where('user_id', '=', $user->id)->leftJoin('users','users.id', '=', 'posts.user_id')->select('posts.*', 'users.avatar', 'users.name', 'users.background');
+        $user_id = $user->id;
+        if($request->has('user_id'))
+            $user_id = $request->user_id;
+        $findUser = UserModel::find($user_id);
+        if(!isset($findUser)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $data = PostModel::where('user_id', '=', $user_id)->leftJoin('users','users.id', '=', 'posts.user_id')->select('posts.*', 'users.avatar', 'users.name', 'users.background');
         if($request->has('left_id'))
             $data = $data->where('id', '>', $request->left_id);
         return APIResponse::SUCCESS($data->paginate(15));
