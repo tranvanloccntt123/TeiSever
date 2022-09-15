@@ -33,7 +33,7 @@ class Post extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $UUID = UUID::guidv4();
         if($request->has('media')){
             $path = 'post'; 
@@ -42,6 +42,26 @@ class Post extends Controller
         }
         PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'UUID' => $UUID, 'type_media' => $request->has('media')? 'image' : '', 'media' => $request->has('media')? $path.'/'.$name : '']);
         return APIResponse::SUCCESS(['UUID' => $UUID]);
+    }
+
+    public function update(Request $request){
+        $rule = [
+            "application_id" => "required",
+            "post_id" => "required"
+        ];
+        $messages = [
+            'application_id.required' => 'Application ID is không được bỏ trống'
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $findPost = PostModel::find($request->post_id);
+        if(!isset($findPost)) return APIResponse::FAIL(["post" => "Không tìm thấy bài viết"]);
+        if($request->has("content"))
+            $findPost->content = $request->content;
+        $findPost->save();
+        return APIResponse::SUCCESS(["post" => "Bài viết đã được cập nhật"]);
     }
 
     public function delete(Request $request){
@@ -56,19 +76,27 @@ class Post extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $find = PostModel::where('UUID', 'LIKE', $request->uuid)->first();
         if(isset($find)) $find->delete();
         return APIResponse::SUCCESS(['post' => 'Xóa thành công']);
     }
 
     public function list(Request $request){
+        $rule = [
+            "application_id" => "required"
+        ];
+        $messages = [
+            'application_id.required' => 'Application ID is không được bỏ trống'
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         $user_id = $user->id;
         if($request->has('user_id'))
             $user_id = $request->user_id;
         $findUser = UserModel::find($user_id);
-        if(!isset($findUser)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        if(!isset($findUser) && $findUser->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $data = PostModel::where('user_id', '=', $user_id)->leftJoin('users','users.id', '=', 'posts.user_id')->select('posts.*', 'users.avatar', 'users.name', 'users.background');
         if($request->has('left_id'))
             $data = $data->where('id', '>', $request->left_id);

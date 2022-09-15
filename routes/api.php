@@ -55,6 +55,7 @@ Route::prefix('v1')->group(function(){
         Route::post('create', [Postv1::class, 'create']);
         Route::post('delete', [Postv1::class, 'delete']);
         Route::get('list', [Postv1::class, 'list']);
+        Route::post('update', [Postv1::class, 'update']);
     });
 
     Route::middleware('auth:sanctum')->prefix('profile')->group(function(){
