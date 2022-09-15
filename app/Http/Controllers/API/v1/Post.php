@@ -40,7 +40,7 @@ class Post extends Controller
             $name = $UUID.'.jpg';
             $request->file('media')->storeAs($path, $name);
         }
-        PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'UUID' => $UUID, 'type' => $request->has('media')? 'image' : '', 'media' => $request->has('media')? $path.'/'.$name : '']);
+        PostModel::create(['user_id' => $user->id, 'content' => $request->content, 'UUID' => $UUID, 'type_media' => $request->has('media')? 'image' : '', 'media' => $request->has('media')? $path.'/'.$name : '']);
         return APIResponse::SUCCESS(['UUID' => $UUID]);
     }
 
