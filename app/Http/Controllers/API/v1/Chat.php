@@ -33,7 +33,7 @@ class Chat extends Controller
             'application_id' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
          ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
@@ -83,7 +83,7 @@ class Chat extends Controller
             'UUID' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
             'UUID.required' => 'Không tìm thấy ID tin nhắn'
          ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -103,7 +103,7 @@ class Chat extends Controller
             'content' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
             'id.required' => 'Không tìm thấy ID tin nhắn',
             'type.required' => 'Type không được bỏ trống',
             'content.required' => 'Nội dung tin nhắn không được bỏ trống' 

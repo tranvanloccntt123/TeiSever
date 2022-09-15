@@ -25,7 +25,7 @@ class RelationShip extends Controller
             'status' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
             'friend.required' => 'Đối tượng không được để trống',
             'status.required' => 'Trạng thái không được để trống'
         ];
@@ -64,7 +64,7 @@ class RelationShip extends Controller
             'application_id' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống'
+            'application_id.required' => 'Application ID không được bỏ trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());

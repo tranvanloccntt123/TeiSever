@@ -27,7 +27,7 @@ class Post extends Controller
             "application_id" => "required"
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
             'content.required' => 'Nôị dung không được bỏ trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -47,16 +47,17 @@ class Post extends Controller
     public function update(Request $request){
         $rule = [
             "application_id" => "required",
-            "post_id" => "required"
+            "uuid" => "required"
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống'
+            'application_id.required' => 'Application ID không được bỏ trống',
+            'uuid.required' => 'UUID không được bỏ trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
-        $findPost = PostModel::find($request->post_id);
+        $findPost = PostModel::where('UUID', 'LIKE', $request->uuid)->first();
         if(!isset($findPost)) return APIResponse::FAIL(["post" => "Không tìm thấy bài viết"]);
         if($request->has("content"))
             $findPost->content = $request->content;
@@ -70,7 +71,7 @@ class Post extends Controller
             'uuid' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
             'uuid.required' => 'UUID is không được bỏ trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -87,7 +88,7 @@ class Post extends Controller
             "application_id" => "required"
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống'
+            'application_id.required' => 'Application ID không được bỏ trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());

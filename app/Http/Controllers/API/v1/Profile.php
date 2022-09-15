@@ -17,7 +17,7 @@ class Profile extends Controller
             'application_id' => 'required',
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
@@ -39,7 +39,7 @@ class Profile extends Controller
             'avatar' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
             'avatar.required' => 'Ảnh đại diện không được để trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -62,7 +62,7 @@ class Profile extends Controller
             'background' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID is không được bỏ trống',
+            'application_id.required' => 'Application ID không được bỏ trống',
             'background.required' => 'Ảnh bìa không được để trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
