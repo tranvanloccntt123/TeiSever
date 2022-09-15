@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\UUID;
 use App\Models\User as UserModel;
 use App\Models\Post as PostModel;
 use App\Models\RelationShip as RelationShipModel;
@@ -46,8 +47,9 @@ class Profile extends Controller
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
-        $path = 'public/user/avatar/'.$request->id;
-        $name = "avatar.jpg";
+        $path = 'avatar';
+        $UUID = UUID::guidv4();
+        $name = $UUID.".jpg";
         $request->file('avatar')->storeAs($path, $name);
         $user->avatar = $path.'/'.$name;
         $user->save();
@@ -69,8 +71,9 @@ class Profile extends Controller
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
-        $path = 'public/user/background/'.$request->id;
-        $name = "background.jpg";
+        $path = 'background';
+        $UUID = UUID::guidv4();
+        $name = $UUID.".jpg";
         $request->file('background')->storeAs($path, $name);
         $user->background = $path.'/'.$name;
         $user->save();

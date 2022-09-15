@@ -125,7 +125,7 @@ class Chat extends Controller
                 break;
             }
             case MessageType::image->name: {
-                $path = 'public/message/'.$request->id; 
+                $path = 'message'; 
                 $name = $UUID.'.jpg';
                 $request->file('content')->storeAs($path, $name);
                 MessageModel::create([
