@@ -28,16 +28,21 @@ class Profile extends Controller
         $posts = PostModel::where('user_id', '=', $user_id)->count();
         $friends = RelationShipModel::where('user_id', '=', $user_id)->where('status', '=', $this->getStatusConfirm())->count();
         $relationShips = -1;
+        $whoRequest = -1;
         if($request->user()->id == $user_id) $relationShips = 3;
         else{
             $findRelationShip = RelationShipModel::where('user_id', '=', $request->user()->id)->where('friend', '=', $user_id)->first();
-            if(isset($findRelationShip)) $relationShips = $findRelationShip->status;
+            if(isset($findRelationShip)) {
+                $relationShips = $findRelationShip->status;
+                $whoRequest = $findRelationShip->who_request;
+            }
         }
         return APIResponse::SUCCESS([
             'profile' => $checkUserApplication,
             'posts' => $posts,
             'friends' => $friends,
-            'relation_ship' => $relationShips
+            'relation_ship' => $relationShips,
+            'who_request' => $whoRequest
         ]);
     }
 

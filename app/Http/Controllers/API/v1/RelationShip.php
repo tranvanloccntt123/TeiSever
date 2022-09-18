@@ -37,6 +37,7 @@ class RelationShip extends Controller
         if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
         $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where('friend', '=', $request->friend)->first();
         if(isset($findRelationShip)) {
+            if($findRelationShip->who_request == $user->id && $request->status == StatusType::confirm->name) return APIResponse::FAIL(['request' => ["Không tìm thể gửi yêu cầu"]]);
             $findRelationShip->status = $this->getStatus($request->status);
             $findRelationShip->save();
             $findRevertRelationShip = RelationShipModel::where('user_id', '=', $request->friend)->where('friend', '=', $user->id)->first();
@@ -45,15 +46,17 @@ class RelationShip extends Controller
         } else {
             RelationShipModel::create([
                 'user_id' => $user->id,
-                'friend' => $reqeust->friend,
+                'friend' => $request->friend,
                 'application_id' => $request->application_id,
                 'status' => $this->getStatus($request->status),
+                'who_request' => $user->id,
             ]);
             RelationShipModel::create([
-                'user_id' => $reqeust->friend, 
+                'user_id' => $request->friend, 
                 'friend' => $user->id,
                 'application_id' => $request->application_id,
                 'status' => $this->getStatus($request->status),
+                'who_request' => $user->id
             ]);
         }
         return APIResponse::SUCCESS(["relation" => "Yêu cầu đã được xử lý thành công"]);
