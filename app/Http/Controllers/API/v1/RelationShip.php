@@ -56,7 +56,7 @@ class RelationShip extends Controller
                 'status' => $this->getStatus($request->status),
             ]);
         }
-        return APIResponse::SUCCESS("Yêu cầu đã được xử lý thành công");
+        return APIResponse::SUCCESS(["relation" => "Yêu cầu đã được xử lý thành công"]);
     }
 
     public function getList(Request $request){

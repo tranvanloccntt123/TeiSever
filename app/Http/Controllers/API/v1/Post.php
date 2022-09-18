@@ -100,7 +100,7 @@ class Post extends Controller
         if(!isset($findUser) && $findUser->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $data = PostModel::where('user_id', '=', $user_id)->leftJoin('users','users.id', '=', 'posts.user_id')->select('posts.*', 'users.avatar', 'users.name', 'users.background');
         if($request->has('left_id'))
-            $data = $data->where('id', '>', $request->left_id);
+            $data = $data->where('posts.id', '>', $request->left_id);
         return APIResponse::SUCCESS($data->paginate(15));
     }
 }
