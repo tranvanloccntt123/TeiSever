@@ -32,7 +32,7 @@ class RelationShip extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $checkUserApplication = UserModel::find($request->friend);
         if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
         $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where('friend', '=', $request->friend)->first();
@@ -72,7 +72,7 @@ class RelationShip extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $list = RelationShipModel::where('relationships.user_id', '=', $user->id)
             ->where('relationships.status', '=', $this->getStatus(StatusType::confirm->name))
             ->where('relationships.application_id', '=', $request->application_id)
@@ -82,5 +82,32 @@ class RelationShip extends Controller
         if($request->has('left_id'))
             $list = $list->where('relationships.id', '<', $request->left_id);
         return APIResponse::SUCCESS($list->paginate(15));
+    }
+
+    public function checkRelation(Request $request){
+        $rule = [
+            'application_id' => 'required',
+            'user_id' => 'required'
+        ];
+        $messages = [
+            'application_id.required' => 'Application ID không được bỏ trống',
+            'user_id.required' => 'Đối tượng không được để trống'
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $findRelationShip = RelationShipModel::where('relationships.user_id', '=', $user->id)
+        ->where("relationships.friend", "=", $request->user_id)->first();
+        $relationStatus = -1;
+        $relationWhoRequest = false;
+        if($findRelationShip){
+            $relationStatus = $findRelationShip->status;
+            $relationWhoRequest = $findRelationShip->who_request == $user->id;
+        }
+        return APIResponse::SUCCESS([
+            'status' => $relationStatus,
+            'personRequest' => $relationWhoRequest
+        ]);
     }
 }

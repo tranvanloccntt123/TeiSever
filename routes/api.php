@@ -69,6 +69,7 @@ Route::prefix('v1')->group(function(){
         Route::prefix('relation')->group(function(){
             Route::get('list', [RelationShipv1::class, 'getList']);
             Route::post('request', [RelationShipv1::class, 'create']);
+            Route::get('check', [RelationShipv1::class, 'checkRelation']);
         });
     });
 
