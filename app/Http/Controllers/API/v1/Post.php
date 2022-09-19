@@ -93,6 +93,7 @@ class Post extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $user_id = $user->id;
         if($request->has('user_id'))
             $user_id = $request->user_id;
@@ -102,5 +103,24 @@ class Post extends Controller
         if($request->has('left_id'))
             $data = $data->where('posts.id', '>', $request->left_id);
         return APIResponse::SUCCESS($data->paginate(15));
+    }
+
+    public function getMedia(Request $request){
+        $rule = [
+            "application_id" => "required"
+        ];
+        $messages = [
+            'application_id.required' => 'Application ID không được bỏ trống'
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $user_id = $user->id;
+        if($request->has('user_id'))
+            $user_id = $request->user_id;
+        $findUser = UserModel::find($user_id);
+        if(!isset($findUser) && $findUser->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        
     }
 }
