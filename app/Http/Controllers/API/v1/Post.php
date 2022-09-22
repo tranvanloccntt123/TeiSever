@@ -61,6 +61,12 @@ class Post extends Controller
         if(!isset($findPost)) return APIResponse::FAIL(["post" => "Không tìm thấy bài viết"]);
         if($request->has("content"))
             $findPost->content = $request->content;
+        if($request->has('media')){
+            $path = 'post'; 
+            $name = $findPost->UUID.'.jpg';
+            $request->file('media')->storeAs($path, $name);
+            $findPost->media = $path.'/'.$name;
+        }
         $findPost->save();
         return APIResponse::SUCCESS(["post" => "Bài viết đã được cập nhật"]);
     }
