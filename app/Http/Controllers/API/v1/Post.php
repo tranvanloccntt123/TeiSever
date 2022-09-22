@@ -63,7 +63,8 @@ class Post extends Controller
             $findPost->content = $request->content;
         if($request->has('media')){
             $path = 'post'; 
-            $name = $findPost->UUID.'.jpg';
+            $UUID = UUID::guidv4();
+            $name = $UUID.'.jpg';
             $request->file('media')->storeAs($path, $name);
             $findPost->media = $path.'/'.$name;
         }
