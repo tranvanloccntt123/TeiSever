@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Post as PostModel;
 use App\Models\User as UserModel;
 use App\Http\Controllers\API\v1\Response as APIResponse;
-
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 enum MessageType{
@@ -63,6 +63,9 @@ class Post extends Controller
             $findPost->content = $request->content;
         if($request->has('media')){
             $path = 'post'; 
+            if($findPost->media != "")
+                Storage::delete($findPost->media);
+            $findPost->type_media = $request->has('media')? 'image' : '';
             $UUID = UUID::guidv4();
             $name = $UUID.'.jpg';
             $request->file('media')->storeAs($path, $name);
