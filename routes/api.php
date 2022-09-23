@@ -62,6 +62,7 @@ Route::prefix('v1')->group(function(){
         Route::prefix('change')->group(function(){
             Route::post('avatar', [Profilev1::class, 'changeAvatar']);
             Route::post('background', [Profilev1::class, 'changeBackground']);
+            Route::post('detail', [Profilev1::class, 'updateDetail']);
         });
 
         Route::get('/visit', [Profilev1::class, 'viewProfile']);

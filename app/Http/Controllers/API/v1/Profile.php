@@ -22,6 +22,8 @@ class Profile extends Controller
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $user_id = $request->has('user_id')? $request->user_id : $request->user()->id;
         $checkUserApplication = UserModel::find($user_id);
         if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
@@ -46,7 +48,7 @@ class Profile extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $path = 'avatar';
         $UUID = UUID::guidv4();
         $name = $UUID.".jpg";
@@ -55,6 +57,29 @@ class Profile extends Controller
         $user->save();
         return APIResponse::SUCCESS([
             'avatar' => $path.'/'.$name
+        ]);
+    }
+
+    public function updateDetail(Request $request){
+        $rule = [
+            'application_id' => 'required'
+        ];
+        $messages = [
+            'application_id.required' => 'Application ID không được bỏ trống'
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        if($request->has('name'))
+            $user->name = $request->name;
+        if($request->has('email'))
+            $user->email = $request->email;
+        if($request->has('description'))
+            $user->description = $request->description;
+        $user->save();
+        return APIResponse::SUCCESS([
+            'user' => $user
         ]);
     }
 
@@ -70,7 +95,7 @@ class Profile extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $path = 'background';
         $UUID = UUID::guidv4();
         $name = $UUID.".jpg";
