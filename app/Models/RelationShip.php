@@ -9,5 +9,5 @@ class RelationShip extends Model
 {
     use HasFactory;
     protected $table = "relationships";
-    protected $fillable = ['user_id', 'friend', 'application_id', 'status', 'who_request'];
+    protected $fillable = ['user_id', 'friend', 'application_id', 'status', 'who_request', 'description', 'start'];
 }

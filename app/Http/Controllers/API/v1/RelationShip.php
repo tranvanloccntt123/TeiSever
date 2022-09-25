@@ -125,4 +125,35 @@ class RelationShip extends Controller
             'personRequest' => $relationWhoRequest
         ]);
     }
+
+    public function createRelationShipDescription(Request $request){
+        $rule = [
+            'application_id' => 'required',
+            'id' => 'required',
+            'description' => 'required',
+            'start' => 'required'
+        ];
+        $messages = [
+            'application_id.required' => 'Application ID không được bỏ trống',
+            'id.required' => 'Không tìm thấy ID tin nhắn',
+            'description.required' => 'Mô tả không được bỏ trống',
+            'start.required' => 'thời điểm bắt đầu không được bỏ trống'
+         ];
+         //date('Y-m-d H:i:s','1299762201428')
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where('friend', '=', $request->id)->first();
+        if(!isset($findRelationShip)) return APIResponse::FAIL(['relation' => ["Bạn cần phải kết bạn trước đó"]]);
+        
+        $findRelationShip->description = $request->description;
+        $findRelationShip->start = $request->start;
+        $findRelationShip->save();
+
+        $findRelationShip = RelationShipModel::where('user_id', '=', $request->id)->where('friend', '=', $user->id)->first();
+        $findRelationShip->description = $request->description;
+        $findRelationShip->start = $request->start;
+        $findRelationShip->save();
+    }
 }

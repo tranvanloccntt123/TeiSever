@@ -25,6 +25,16 @@ enum MessageType{
     case audio;
 }
 
+enum DescriptionType{
+    case lover;
+    case brother;
+    case mother;
+    case father;
+    case wife;
+    case son;
+    case daughter;
+}
+
 class Chat extends Controller
 {
 
