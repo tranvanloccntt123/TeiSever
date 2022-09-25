@@ -45,10 +45,8 @@ class RelationShip extends Controller
                     $findRevertRelationShip = RelationShipModel::where('user_id', '=', $request->friend)->where('friend', '=', $user->id)->first();
                     $findRevertRelationShip->status = $this->getStatus($request->status);
                     $findRevertRelationShip->save();
-                    return APIResponse::SUCCESS(["relation" => "Yêu cầu đã được xử lý thành công"]);
-
                     $relationStatus = $this->getStatus($request->status);
-                    $relationWhoRequest = $findRelationShip->who_request;
+                    $relationWhoRequest = $findRelationShip->who_request == $user->id;
                     return APIResponse::SUCCESS([
                         'status' => $relationStatus,
                         'personRequest' => $relationWhoRequest
