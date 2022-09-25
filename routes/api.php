@@ -67,6 +67,8 @@ Route::prefix('v1')->group(function(){
 
         Route::get('/visit', [Profilev1::class, 'viewProfile']);
 
+        Route::get('search', [Profilev1::class, 'searchUser']);
+
         Route::prefix('relation')->group(function(){
             Route::get('list', [RelationShipv1::class, 'getList']);
             Route::post('request', [RelationShipv1::class, 'create']);

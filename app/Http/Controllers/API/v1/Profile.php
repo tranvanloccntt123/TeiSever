@@ -106,4 +106,23 @@ class Profile extends Controller
             'background' => $path.'/'.$name
         ]);
     }
+
+    public function searchUser(Request $request){
+        $rule = [
+            'application_id' => 'required',
+            'keyword' => 'required'
+        ];
+        $messages = [
+            'application_id.required' => 'Application ID không được bỏ trống',
+            'keyword.required' => 'Keyword không được để trống'
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $data = UserModel::where('name', '%LIKE%', $request->keyword)->get();
+        return APIResponse::SUCCESS([
+            'users' => $data
+        ]);
+    }
 }
