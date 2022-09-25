@@ -46,6 +46,13 @@ class RelationShip extends Controller
                     $findRevertRelationShip->status = $this->getStatus($request->status);
                     $findRevertRelationShip->save();
                     return APIResponse::SUCCESS(["relation" => "Yêu cầu đã được xử lý thành công"]);
+
+                    $relationStatus = $this->getStatus($request->status);
+                    $relationWhoRequest = $findRelationShip->who_request;
+                    return APIResponse::SUCCESS([
+                        'status' => $relationStatus,
+                        'personRequest' => $relationWhoRequest
+                    ]);
                 }
                 return APIResponse::FAIL(["relation" => "Yêu cầu xử lý thất bại"]);
             }
@@ -66,12 +73,17 @@ class RelationShip extends Controller
                     'status' => $this->getStatus($request->status),
                     'who_request' => $user->id
                 ]);
-                return APIResponse::SUCCESS(["relation" => "Yêu cầu đã được xử lý thành công"]);
+                $relationStatus = $this->getStatus($request->status);
+                $relationWhoRequest = $user->id;
+                return APIResponse::SUCCESS([
+                    'status' => $relationStatus,
+                    'personRequest' => $relationWhoRequest
+                ]);
             }
             case StatusType::cancel->name: {
                 RelationShipModel::where('user_id', '=', $user->id)->where('friend', '=', $request->friend)->delete();
                 RelationShipModel::where('user_id', '=', $request->friend)->where('friend', '=', $user->id)->delete();
-                return APIResponse::SUCCESS(["relation" => "Yêu cầu đã được xử lý thành công"]);
+                return APIResponse::SUCCESS(['status' => -1, 'personRequest' => false]);
             }
         }
         return APIResponse::FAIL(["relation" => "Yêu cầu xử lý thất bại"]);
