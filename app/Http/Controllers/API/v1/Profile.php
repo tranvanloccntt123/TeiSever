@@ -121,7 +121,7 @@ class Profile extends Controller
         $user = $request->user();
         if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $search = mb_strtolower(trim(request()->input('keyword')));
-        $data = UserModel::whereRaw('LOWER(`name`) LIKE ? ',['%'.$search.'%'])->get();
+        $data = UserModel::whereRaw('LOWER(`name`) LIKE ? ',['%'.$search.'%'])->where('application_id', '=', $request->application_id)->get();
         return APIResponse::SUCCESS([
             'users' => $data
         ]);

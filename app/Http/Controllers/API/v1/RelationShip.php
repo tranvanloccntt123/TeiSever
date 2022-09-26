@@ -15,6 +15,19 @@ enum StatusType{
     case cancel;
 }
 
+enum RelationShipDescription{
+    case friend;
+    case daughter;
+    case husband;
+    case wife;
+    case son;
+    case grandfather;
+    case grandmother;
+    case father;
+    case mother;
+    case lover;
+}
+
 class RelationShip extends Controller
 {
     //
