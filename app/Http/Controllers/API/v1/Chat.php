@@ -39,14 +39,6 @@ class Chat extends Controller
 {
 
     public function getListMessage(Request $request){
-        $rule = [
-            'application_id' => 'required'
-        ];
-        $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
-         ];
-        $validator = Validator::make($request->all(), $rule, $messages);
-        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $listGroup = GroupMessageUserModel::where('group_message_user.user_id','=',$user->id)
@@ -70,11 +62,9 @@ class Chat extends Controller
 
     public function getCurrentMessages(Request $request){
         $rule = [
-            'application_id' => 'required',
             'id' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'id.required' => 'ID không được bỏ trống'
          ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -89,11 +79,9 @@ class Chat extends Controller
 
     public function getDetailMessage(Request $request){
         $rule = [
-            'application_id' => 'required',
             'UUID' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'UUID.required' => 'Không tìm thấy ID tin nhắn'
          ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -107,13 +95,11 @@ class Chat extends Controller
 
     public function sendMessage(Request $request){
         $rule = [
-            'application_id' => 'required',
             'id' => 'required',
             'type' => 'required',
             'content' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'id.required' => 'Không tìm thấy ID tin nhắn',
             'type.required' => 'Type không được bỏ trống',
             'content.required' => 'Nội dung tin nhắn không được bỏ trống' 

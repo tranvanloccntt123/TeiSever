@@ -28,21 +28,9 @@ class PMProduct extends Controller
         return APIResponse::SUCCESS("Sản phẩm đã được thêm");
     }
     public function get(Request $request){
-        $rule = ["application_id" => "required"];
-        $messages = [
-            'application_id.required' => "Application ID không được bỏ trống"
-        ];
-        $validator = Validator::make($request->all(), $rule, $messages);
-        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         return PMProductModell::where("application_id",'=',$request->application_id)->get();
     }
     public function paginate(Request $request){
-        $rule = ["application_id" => "required"];
-        $messages = [
-            'application_id.required' => "Application ID không được bỏ trống"
-        ];
-        $validator = Validator::make($request->all(), $rule, $messages);
-        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         return PMProductModell::where("application_id",'=',$request->application_id)->paginate(12);
     }
 }

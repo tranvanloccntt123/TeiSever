@@ -14,14 +14,6 @@ class Profile extends Controller
 {
     //
     public function viewProfile(Request $request){
-        $rule = [
-            'application_id' => 'required',
-        ];
-        $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
-        ];
-        $validator = Validator::make($request->all(), $rule, $messages);
-        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $user_id = $request->has('user_id')? $request->user_id : $request->user()->id;
@@ -38,11 +30,9 @@ class Profile extends Controller
 
     public function changeAvatar(Request $request){
         $rule = [
-            'application_id' => 'required',
             'avatar' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'avatar.required' => 'Ảnh đại diện không được để trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -61,14 +51,6 @@ class Profile extends Controller
     }
 
     public function updateDetail(Request $request){
-        $rule = [
-            'application_id' => 'required'
-        ];
-        $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống'
-        ];
-        $validator = Validator::make($request->all(), $rule, $messages);
-        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         if($request->has('name'))
@@ -85,11 +67,9 @@ class Profile extends Controller
 
     public function changeBackground(Request $request){
         $rule = [
-            'application_id' => 'required',
             'background' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'background.required' => 'Ảnh bìa không được để trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -109,11 +89,9 @@ class Profile extends Controller
 
     public function searchUser(Request $request){
         $rule = [
-            'application_id' => 'required',
             'keyword' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'keyword.required' => 'Keyword không được để trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);

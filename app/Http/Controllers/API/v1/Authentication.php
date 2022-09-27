@@ -18,7 +18,6 @@ class Authentication extends Controller
             'password' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống.',
             'name.required' => 'Bạn chưa điền họ và tên',
             'password.required' => 'Mật khẩu không được để trống',
             'username.required' => 'Bạn chưa điền tên đăng nhập'
@@ -46,7 +45,6 @@ class Authentication extends Controller
             'application_id' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống.',
             'password.required' => 'Mật khẩu không được để trống',
             'username.required' => 'Bạn chưa điền tên đăng nhập'
         ];

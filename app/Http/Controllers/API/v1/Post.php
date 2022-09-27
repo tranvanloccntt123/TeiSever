@@ -24,10 +24,8 @@ class Post extends Controller
     public function create(Request $request){
         $rule = [
             "content" => "required",
-            "application_id" => "required"
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'content.required' => 'Nôị dung không được bỏ trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -46,11 +44,9 @@ class Post extends Controller
 
     public function update(Request $request){
         $rule = [
-            "application_id" => "required",
             "uuid" => "required"
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'uuid.required' => 'UUID không được bỏ trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -77,11 +73,9 @@ class Post extends Controller
 
     public function delete(Request $request){
         $rule = [
-            "application_id" => "required",
             'uuid' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'uuid.required' => 'UUID is không được bỏ trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -94,14 +88,6 @@ class Post extends Controller
     }
 
     public function list(Request $request){
-        $rule = [
-            "application_id" => "required"
-        ];
-        $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống'
-        ];
-        $validator = Validator::make($request->all(), $rule, $messages);
-        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $user_id = $user->id;
@@ -116,14 +102,6 @@ class Post extends Controller
     }
 
     public function getMedia(Request $request){
-        $rule = [
-            "application_id" => "required"
-        ];
-        $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống'
-        ];
-        $validator = Validator::make($request->all(), $rule, $messages);
-        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $user_id = $user->id;

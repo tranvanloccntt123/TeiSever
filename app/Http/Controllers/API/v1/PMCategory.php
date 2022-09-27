@@ -11,12 +11,6 @@ class PMCategory extends Controller
 {
      //
     public function get(Reqeust $request){
-         $rule = ['application_id' => 'required'];
-         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống.'
-         ];
-         $validator = Validator::make($request->all(), $rule, $messages);
-         if($validator->fails()) return APIResponse::FAIL($validator->errors());
          return PMCategoryModel::select('id', 'name', 'description')->where('applications', 'LIKE', '%'.$request->application_id.'%')->get();
      }
     public function create(Request $request){

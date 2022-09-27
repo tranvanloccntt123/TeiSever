@@ -33,12 +33,10 @@ class RelationShip extends Controller
     //
     public function create(Request $request){
         $rule = [
-            'application_id' => 'required',
             'friend' => 'required',
             'status' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'friend.required' => 'Đối tượng không được để trống',
             'status.required' => 'Trạng thái không được để trống'
         ];
@@ -101,14 +99,6 @@ class RelationShip extends Controller
     }
 
     public function getList(Request $request){
-        $rule = [
-            'application_id' => 'required'
-        ];
-        $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống'
-        ];
-        $validator = Validator::make($request->all(), $rule, $messages);
-        if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $list = RelationShipModel::where('relationships.user_id', '=', $user->id)
@@ -124,11 +114,9 @@ class RelationShip extends Controller
 
     public function checkRelation(Request $request){
         $rule = [
-            'application_id' => 'required',
             'user_id' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'user_id.required' => 'Đối tượng không được để trống'
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
@@ -151,13 +139,11 @@ class RelationShip extends Controller
 
     public function createRelationShipDescription(Request $request){
         $rule = [
-            'application_id' => 'required',
             'id' => 'required',
             'description' => 'required',
             'start' => 'required'
         ];
         $messages = [
-            'application_id.required' => 'Application ID không được bỏ trống',
             'id.required' => 'Không tìm thấy ID tin nhắn',
             'description.required' => 'Mô tả không được bỏ trống',
             'start.required' => 'thời điểm bắt đầu không được bỏ trống'
