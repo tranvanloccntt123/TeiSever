@@ -139,12 +139,12 @@ class RelationShip extends Controller
 
     public function createRelationShipDescription(Request $request){
         $rule = [
-            'id' => 'required',
+            'user_id' => 'required',
             'description' => 'required',
             'start' => 'required'
         ];
         $messages = [
-            'id.required' => 'Không tìm thấy ID tin nhắn',
+            'user_id.required' => 'Không tìm thấy ID tin nhắn',
             'description.required' => 'Mô tả không được bỏ trống',
             'start.required' => 'thời điểm bắt đầu không được bỏ trống'
          ];
@@ -153,20 +153,23 @@ class RelationShip extends Controller
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
-        $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where('friend', '=', $request->id)->first();
+        $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where('friend', '=', $request->user_id)->first();
         if(!isset($findRelationShip)) return APIResponse::FAIL(['relation' => ["Bạn cần phải kết bạn trước đó"]]);
         
         $findRelationShip->description = $request->description;
         $findRelationShip->start = $request->start;
         $findRelationShip->save();
 
-        $findRelationShip = RelationShipModel::where('user_id', '=', $request->id)->where('friend', '=', $user->id)->first();
+        $findRelationShip = RelationShipModel::where('user_id', '=', $request->user_id)->where('friend', '=', $user->id)->first();
         $findRelationShip->description = $request->description;
         $findRelationShip->start = $request->start;
         $findRelationShip->save();
     }
 
     public function getRelationShipDescription(Request $request){
-        
+        $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where("description", "!=", "")->get();
+        return APIResponse::SUCCESS([
+            'relation' => $findRelationShip
+        ]);
     }
 }
