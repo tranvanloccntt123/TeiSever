@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('relationships', function (Blueprint $table) {
             //
-            $table->timestamp('start')->nullable();
+            $table->string('start')->nullable();
         });
     }
 
