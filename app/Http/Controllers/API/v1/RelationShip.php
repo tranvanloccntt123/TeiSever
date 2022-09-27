@@ -179,4 +179,8 @@ class RelationShip extends Controller
         $findRelationShip->start = $request->start;
         $findRelationShip->save();
     }
+
+    public function getRelationShipDescription(Request $request){
+        
+    }
 }
