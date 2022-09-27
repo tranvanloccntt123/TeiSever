@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\v1\Response as APIResponse;
 use Validator;
-class ApplicationIsvalid
+class ApplicationIsValid
 {
     /**
      * Handle an incoming request.
