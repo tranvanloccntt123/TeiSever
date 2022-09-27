@@ -160,10 +160,14 @@ class RelationShip extends Controller
         $findRelationShip->start = $request->start;
         $findRelationShip->save();
 
-        $findRelationShip = RelationShipModel::where('user_id', '=', $request->user_id)->where('friend', '=', $user->id)->first();
-        $findRelationShip->description = $request->description;
-        $findRelationShip->start = $request->start;
-        $findRelationShip->save();
+        $findRelationShipOther = RelationShipModel::where('user_id', '=', $request->user_id)->where('friend', '=', $user->id)->first();
+        $findRelationShipOther->description = $request->description;
+        $findRelationShipOther->start = $request->start;
+        $findRelationShipOther->save();
+
+        return APIResponse::SUCCESS([
+            'relation' => $findRelationShip,
+        ]); 
     }
 
     public function getRelationShipDescription(Request $request){
