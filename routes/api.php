@@ -81,8 +81,10 @@ Route::prefix('v1')->group(function(){
             });   
         });
         
-        Route::post('register', [Authenticationv1::class, 'createAccount'])->name('api.auth.register');
-        Route::post('login', [Authenticationv1::class, 'createToken'])->name('api.auth.login');
+        Route::prefix('auth')->group(function(){
+            Route::post('register', [Authenticationv1::class, 'createAccount'])->name('api.auth.register');
+            Route::post('login', [Authenticationv1::class, 'createToken'])->name('api.auth.login');
+        });
     });
     
 });
