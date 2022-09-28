@@ -144,7 +144,7 @@ class RelationShip extends Controller
             'start' => 'required'
         ];
         $messages = [
-            'user_id.required' => 'Không tìm thấy ID tin nhắn',
+            'user_id.required' => 'Đối tượng khôngg được bỏ trống',
             'description.required' => 'Mô tả không được bỏ trống',
             'start.required' => 'thời điểm bắt đầu không được bỏ trống'
          ];

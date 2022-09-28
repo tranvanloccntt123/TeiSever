@@ -77,6 +77,7 @@ Route::prefix('v1')->group(function(){
                     Route::post('request', [RelationShipv1::class, 'create']);
                     Route::get('check', [RelationShipv1::class, 'checkRelation']);
                     Route::post('near/description', [RelationShipv1::class, 'createRelationShipDescription']);
+                    Route::get('near/description', [RelationShipv1::class, 'getRelationShipDescription']);
                 });
             });   
         });
