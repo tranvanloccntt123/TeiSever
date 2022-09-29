@@ -52,6 +52,7 @@ Route::prefix('v1')->group(function(){
                 Route::get('messages', [Chatv1::class, 'getCurrentMessages']);
                 Route::get('detail', [Chatv1::class, 'getDetailMessage']);
                 Route::post('send', [Chatv1::class, 'sendMessage']);
+                Route::get('get/group', [Chatv1::class, 'getOrCreateGroupMessage']);
             });
         
             Route::prefix('post')->group(function(){

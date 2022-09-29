@@ -9,6 +9,7 @@ use App\Models\User as UserModel;
 use App\Models\Message as MessageModel;
 use App\Models\GroupMessage as GroupMessageModel;
 use App\Models\GroupMessageUser as GroupMessageUserModel;
+use App\Models\RoomMessageView as RoomMessageViewModel;
 use App\Http\Controllers\API\v1\Response as APIResponse;
 use App\Http\Resources\ListChatCollection;
 use App\Http\Resources\ListChatResource;
@@ -16,6 +17,7 @@ use App\Http\Resources\ChatCollection;
 use App\Http\Resources\ChatResource;
 use Validator;
 use Auth;
+use DB;
 
 enum MessageType{
     case text;
@@ -49,8 +51,18 @@ class Chat extends Controller
         $user = $request->user();
         $findGroupMessage;
         if($request->has('single')){
-            $findGroupMessage = GroupMessageModel::where('user_id', '=', )
+            $findGroupMessage = RoomMessageViewModel::where(function($query) use ($user, $request){
+                    $query->where('group_message_user.user_id', '=', $user->id)
+                    ->orWhere('group_message_user.user_id', '=', $request->user_id);
+                })
+                ->where('ROOM_MESSAGE.count_member', '=', 2)
+                ->leftJoin('group_message_user', 'group_message_user.group_message_id', '=', 'ROOM_MESSAGE.id')
+                ->select('ROOM_MESSAGE.*')
+                ->groupBy('id', 'name', 'created_at', 'count_member')
+                ->first();
+            return $findGroupMessage;
         }
+        return null;
     }
 
     public function getListMessage(Request $request){
