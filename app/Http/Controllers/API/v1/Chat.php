@@ -37,6 +37,21 @@ enum DescriptionType{
 
 class Chat extends Controller
 {
+    public function getOrCreateGroupMessage(Request $request){
+        $rule = [
+            'user_id' => 'required',            
+        ];
+        $messages = [
+            'user_id.required' => 'Đối tượng khôngg được bỏ trống'
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        $findGroupMessage;
+        if($request->has('single')){
+            $findGroupMessage = GroupMessageModel::where('user_id', '=', )
+        }
+    }
 
     public function getListMessage(Request $request){
         $user = $request->user();
