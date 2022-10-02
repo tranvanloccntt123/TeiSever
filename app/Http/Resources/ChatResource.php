@@ -23,7 +23,9 @@ class ChatResource extends JsonResource
             'uuid' => $this->UUID,
             'user' => [
                 'id' => $this->user_id,
-                'name' => $this->userName
+                'name' => $this->userName,
+                'avatar' => $this->avatar,
+                'background' => $this->background
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
