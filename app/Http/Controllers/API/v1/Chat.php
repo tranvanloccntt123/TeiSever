@@ -60,9 +60,23 @@ class Chat extends Controller
                 ->select('ROOM_MESSAGE.*')
                 ->groupBy('id', 'name', 'created_at', 'count_member')
                 ->first();
-            return $findGroupMessage;
+            if(!isset($findGroupMessage)){
+                $groupId = GroupMessageModel::insertGetId(['name' => '']);
+                GroupMessageUserModel::insert(['user_id' => $request->user_id, 'group_message_id' => $groupId]);
+                GroupMessageUserModel::insert(['user_id' => $user->id, 'group_message_id' => $groupId]);
+                $findGroupMessage = RoomMessageViewModel::where(function($query) use ($user, $request){
+                    $query->where('group_message_user.user_id', '=', $user->id)
+                    ->orWhere('group_message_user.user_id', '=', $request->user_id);
+                })
+                ->where('ROOM_MESSAGE.count_member', '=', 2)
+                ->leftJoin('group_message_user', 'group_message_user.group_message_id', '=', 'ROOM_MESSAGE.id')
+                ->select('ROOM_MESSAGE.*')
+                ->groupBy('id', 'name', 'created_at', 'count_member')
+                ->first();
+            }
+            return APIResponse::SUCCESS(['room' => $findGroupMessage]);
         }
-        return null;
+        return APIResponse::FAIL(['room' => 'Không thể tìm thấy phòng chat']);
     }
 
     public function getListMessage(Request $request){
