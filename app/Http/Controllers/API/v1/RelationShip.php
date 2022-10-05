@@ -171,6 +171,7 @@ class RelationShip extends Controller
     }
 
     public function getRelationShipDescription(Request $request){
+        $user = $request->user();
         $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where("description", "!=", "")->get();
         return APIResponse::SUCCESS([
             'relation' => $findRelationShip
