@@ -129,7 +129,11 @@ class Chat extends Controller
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
-        $data = MessageModel::join('users', 'users.id', '=', 'messages.user_id')->select('messages.*', 'users.name as usertName')->where('UUID', 'LIKE',$request->UUID)->first();
+        $data = MessageModel::join('group_message','group_message.id', '=', 'group_message_user.group_message_id')
+            ->join('users','users.id','=','group_message_user.user_id')
+            ->select('group_message_user.id', 'group_message_user.user_id', 'group_message_user.group_message_id', 'users.name as userName', 'group_message.name as groupName', 'group_message_user.created_at', 'group_message.updated_at')
+            ->where('UUID', 'LIKE',$request->UUID)
+            ->first();
         if(!isset($data)) return APIResponse::FAIL(['id' => ["Không tìm thấy ID tin nhắn"]]);
         return APIResponse::SUCCESS(new ChatResource($data));
     }
