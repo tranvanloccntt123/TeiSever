@@ -71,7 +71,7 @@ class Chat extends Controller
                 ->where('ROOM_MESSAGE.count_member', '=', 2)
                 ->leftJoin('group_message_user', 'group_message_user.group_message_id', '=', 'ROOM_MESSAGE.id')
                 ->select('ROOM_MESSAGE.*')
-                ->groupBy('id', 'name', 'created_at', 'count_member', 'config', 'updated_at')
+                ->groupBy('id', 'name', 'config', 'created_at',  'updated_at', 'count_member')
                 ->first();
             }
             return APIResponse::SUCCESS(['room' => $findGroupMessage]);
