@@ -26,7 +26,7 @@ class Post extends Controller
             "content" => "required",
         ];
         $messages = [
-            'content.required' => 'Nôị dung không được bỏ trống',
+            'content.required' => 'Nội dung không được bỏ trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());

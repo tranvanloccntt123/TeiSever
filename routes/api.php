@@ -27,6 +27,7 @@ use App\Http\Controllers\API\v1\Authentication as Authenticationv1;
 use App\Http\Controllers\API\v1\Chat as Chatv1;
 use App\Http\Controllers\API\v1\Post as Postv1;
 use App\Http\Controllers\API\v1\Profile as Profilev1;
+use App\Http\Controllers\API\v1\Events as Eventv1;
 use App\Http\Controllers\API\v1\RelationShip as RelationShipv1;
 Route::prefix('v1')->group(function(){
     Route::prefix('application')->group(function(){
@@ -81,6 +82,12 @@ Route::prefix('v1')->group(function(){
                     Route::get('near/description', [RelationShipv1::class, 'getRelationShipDescription']);
                 });
             });   
+
+            Route::prefix('events')->group(function(){
+                Route::post('create', [Eventv1::class, 'create']);
+                Route::get('detail', [Eventv1::class, 'detail']);
+                Route::get('get', [Eventv1::class, 'get']);
+            });
         });
         
         Route::prefix('auth')->group(function(){
