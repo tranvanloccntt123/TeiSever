@@ -57,7 +57,7 @@ class Events extends Controller
             ->leftJoin("users", "event_users.user_id", "=", "users.id")
             ->select("events.*", "users.name as name", "users.avatar", "event_users.user_id")
             ->get();
-        return new EventCollection($find);
+        return APIResponse::SUCCESS(new EventCollection($find));
     }
 
     public function get(Request $request){
