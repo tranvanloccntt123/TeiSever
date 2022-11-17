@@ -62,15 +62,24 @@ class Events extends Controller
 
     public function get(Request $request){
         $rule = [
-            "start_at" => "required"
+            "day" => "required",
+            "month" => "required",
+            "year" => "required"
         ];
         $messages = [
-            'start_at.required' => 'Ngày diễn ra sự kiện không được để trống',
+            'day.required' => 'Ngày diễn ra sự kiện không được để trống',
+            'month.required' => 'Tháng diễn ra sự kiện không được để trống',
+            'year.required' => 'Năm diễn ra sự kiện không được để trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         //2022-11-13T15:38:13.000Z
-        $find = EventModel::where('start_at', 'LIKE', $request->uuid."%")
+        $find = EventModel::where('start_at', 'LIKE', "%day: ".$request->day."%")
+            ->where('start_at', 'LIKE', "%month: ".$request->month."%")
+            ->where('start_at', 'LIKE', "%year: ".$request->year."%")
+            ->where('user_id', '=', $user->id)
             ->leftJoin("event_users", "event_users.event_id", "=", "events.id")
             ->leftJoin("users", "event_users.user_id", "=", "users.id")
             ->select("events.*", "users.name as name", "users.avatar", "event_users.user_id")
