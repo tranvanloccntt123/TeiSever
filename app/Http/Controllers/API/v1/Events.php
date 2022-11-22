@@ -19,12 +19,21 @@ class Events extends Controller
             "title" => "required",
             "description" => "required",
             "join" => "required",
-            "start_at" => "required"
+            "day" => "required",
+            "month" => "required",
+            "year" => "required",
+            "hour" => "required",
+            "minute" => "required"
         ];
         $messages = [
             'title.required' => 'Tiêu đề không được bỏ trống',
             'description.required' => 'Mô tả không được bỏ trống',
-            'join.required' => 'Cần có người tham gia trong sự kiện'
+            'join.required' => 'Cần có người tham gia trong sự kiện',
+            'day.required' => 'Ngày không được bỏ trống',
+            'month.required' => 'Tháng không được bỏ trống',
+            'year.required' => 'Năm không được bỏ trống',
+            'hour.required' => 'Giờ không được bỏ trống',
+            'minute.required' => 'Phút không được bỏ trống',
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
@@ -34,7 +43,11 @@ class Events extends Controller
             "title" => $request->title, 
             "description" => $request->description, 
             "config" => $request->has('config')? $request->config : "{}", 
-            "start_at" => $request->start_at,
+            "day" => $request->day,
+            "month" => $request->month,
+            "year" => $request->year,
+            "hour" => $request->hour,
+            "minute" => $request->minute,
             "UUID" => $uuid
         ]);
         foreach ($request->input('join') as $key => $value) {
@@ -76,9 +89,9 @@ class Events extends Controller
         $user = $request->user();
         if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         //2022-11-13T15:38:13.000Z
-        $find = EventModel::where('start_at', 'LIKE', "%day: ".$request->day."%")
-            ->where('start_at', 'LIKE', "%month: ".$request->month."%")
-            ->where('start_at', 'LIKE', "%year: ".$request->year."%")
+        $find = EventModel::where('day', '=', $request->day)
+            ->where('month', '=', $request->month)
+            ->where('year', '=', $request->year)
             ->where('user_id', '=', $user->id)
             ->leftJoin("event_users", "event_users.event_id", "=", "events.id")
             ->leftJoin("users", "event_users.user_id", "=", "users.id")

@@ -20,7 +20,11 @@ class EventCollection extends ResourceCollection
             'id' => $value->id,
             'title' => $value->title,
             'description' => $value->description,
-            'start_at' => $value->start_at,
+            'day' => $value->day,
+            'month' => $value->month,
+            'year' => $value->year,
+            'hour' => $value->hour,
+            'minute' => $value->minute,
             'created_at' => $value->created_at,
             'uuid' => $value->UUID,
             'users' => [
