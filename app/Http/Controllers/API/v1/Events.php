@@ -11,6 +11,7 @@ use App\Models\User as UserModel;
 use App\Http\Controllers\API\v1\Response as APIResponse;
 use App\Http\Resources\EventCollection;
 use Validator;
+use DB;
 class Events extends Controller
 {
     //
@@ -93,6 +94,34 @@ class Events extends Controller
             ->where('month', '=', $request->month)
             ->where('year', '=', $request->year)
             ->where('user_id', '=', $user->id)
+            ->leftJoin("event_users", "event_users.event_id", "=", "events.id")
+            ->leftJoin("users", "event_users.user_id", "=", "users.id")
+            ->select("events.*", "users.name as name", "users.avatar", "event_users.user_id")
+            ->get();
+        return APIResponse::SUCCESS(new EventCollection($find));
+    }
+
+    public function getScheduleFromDate(Request $request){
+        $rule = [
+            "day" => "required",
+            "month" => "required",
+            "year" => "required",
+            "hour" => "required",
+            "minute" => "required"
+        ];
+        $messages = [
+            'day.required' => 'Ngày diễn ra sự kiện không được để trống',
+            'month.required' => 'Tháng diễn ra sự kiện không được để trống',
+            'year.required' => 'Năm diễn ra sự kiện không được để trống',
+            'hour.required' => 'Giờ diễn ra sự kiện không được để trống',
+            'minute.required' => 'Phút diễn ra sự kiện không được để trống',
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
+        $find = EventModel::where('day', '=', $request->day)
+            ->whereRaw("TIMESTAMP(CONCAT(events.year, '-', events.month, '-', events.day, ' ', events.hour, ':', events.minute, ':00')) >= TIMESTAMP('".$request->year."-".$request->month."-".$request->day." ".$request->hour.":".$request->minute.":00')")
             ->leftJoin("event_users", "event_users.event_id", "=", "events.id")
             ->leftJoin("users", "event_users.user_id", "=", "users.id")
             ->select("events.*", "users.name as name", "users.avatar", "event_users.user_id")

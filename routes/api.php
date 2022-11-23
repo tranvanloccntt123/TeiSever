@@ -87,6 +87,7 @@ Route::prefix('v1')->group(function(){
                 Route::post('create', [Eventv1::class, 'create']);
                 Route::get('detail', [Eventv1::class, 'detail']);
                 Route::get('get', [Eventv1::class, 'get']);
+                Route::get('get/from', [Eventv1::class, 'getScheduleFromDate']);
             });
         });
         
