@@ -27,6 +27,7 @@ class EventCollection extends ResourceCollection
             'minute' => $value->minute,
             'created_at' => $value->created_at,
             'uuid' => $value->UUID,
+            'config' => $value->config,
             'users' => [
                 [
                     'id' => $value->user_id,
