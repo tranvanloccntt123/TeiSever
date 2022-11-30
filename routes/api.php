@@ -88,6 +88,7 @@ Route::prefix('v1')->group(function(){
                 Route::get('detail', [Eventv1::class, 'detail']);
                 Route::get('get', [Eventv1::class, 'get']);
                 Route::get('get/from', [Eventv1::class, 'getScheduleFromDate']);
+                Route::post('delete', [Eventv1::class, 'deleteSchedule']);
             });
         });
         

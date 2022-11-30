@@ -64,4 +64,16 @@ class Applications extends Controller
         $result = (new ApplicationAPI())->edit($request);
         return $this->returnBack($result);
     }
+
+    public function docs(Request $request, $id){
+        $config = new Config();
+        $config->title= $this->title;
+        $config->data = [
+            'types' => ApplicationTypeModel::get()
+        ];
+        $config->layouts = [
+            "application-document"
+        ];
+        return $config->resource();
+    }
 }

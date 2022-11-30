@@ -128,4 +128,20 @@ class Events extends Controller
             ->get();
         return APIResponse::SUCCESS(new EventCollection($find));
     }
+
+    public function deleteSchedule(Request $request){
+        $rule = [
+            "uuid" => "required"
+        ];
+        $messages = [
+            'uuid.required' => 'ID không được để trống',
+        ];
+        $validator = Validator::make($request->all(), $rule, $messages);
+        if($validator->fails()) return APIResponse::FAIL($validator->errors());
+        $user = $request->user();
+        $find = EventModel::where('UUID', 'LIKE', $request->uuid)->first();
+        if(!isset($find)) return APIResponse::FAIL(["event" => "Sự kiện không tồn tại"]);
+        EventUserModel::where('user_id', '=', $user->id)->where('event_id', '=', $find->id)->delete();
+        return APIResponse::SUCCESS(['event' => 'Xóa thành công sự kiện']);
+    }
 }

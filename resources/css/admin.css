@@ -15,10 +15,11 @@
 #nav-left-side{
     background-color: #283655;
     position: fixed;
-    top: 55px;
+    top: 0px;
+    padding: 0;
+    padding-top: 55px;
     bottom: 0;
     left: 0;
-    padding: 0;
     box-shadow: 5px 5px 25px 5px #d0e1f9;
     z-index: 2;
 }

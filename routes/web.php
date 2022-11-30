@@ -29,5 +29,6 @@ Route::prefix("/manager")->group(function(){
             Route::get("/{id}", [Applications::class, "manager"])->name('m.application.query');
             Route::post("/select", [Modules::class, "appSelectModule"])->name('m.module.select.submit');
         });
+        Route::get("/document/{id}", [Applications::class, "docs"])->name('m.application.docs');
     });
 });
