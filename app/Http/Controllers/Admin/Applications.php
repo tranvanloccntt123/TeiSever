@@ -30,17 +30,21 @@ class Applications extends Controller
         return $config->resource();
     }
     public function returnBack($result){
-        if($result["status"] == ResponseAPI::$SUCCESS) return redirect()->back()->withSuccess($result["message"]);
+        if($result["status"] == ResponseAPI::$SUCCESS_STATUS) return redirect()->back()->withSuccess($result["message"]);
         return redirect()->back()->withErrors($result["message"]);
     }
     public function create(Request $request){
         if ($request->isMethod('get')) return redirect()->back()->withErrors(["message" => "Không thể đăng kí ứng dụng"]);
-        $result = (new ApplicationAPI())->create($request);
+        $application = (new ApplicationAPI());
+        $application->isApi = false;
+        $result = $application->create($request);
         return $this->returnBack($result);
     }
     public function delete(Request $request){
         if ($request->isMethod('get')) return redirect()->back()->withErrors(["message" => "Không thể xoá ứng dụng"]);
-        $result = (new ApplicationAPI())->delete($request);
+        $application = (new ApplicationAPI());
+        $application->isApi = false;
+        $result = $application->delete($request);
         return $this->returnBack($result);
     }
     public function manager(Request $request, $id){
@@ -61,7 +65,9 @@ class Applications extends Controller
     }
 
     public function edit(Request $request){
-        $result = (new ApplicationAPI())->edit($request);
+        $application = (new ApplicationAPI());
+        $application->isApi = false;
+        $result = $application->edit($request);
         return $this->returnBack($result);
     }
 

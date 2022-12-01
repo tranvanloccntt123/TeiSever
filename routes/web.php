@@ -18,6 +18,7 @@ Route::get('/', function () {
 });
 
 use App\Http\Controllers\Admin\Applications;
+use App\Http\Controllers\Admin\Events;
 use App\Http\Controllers\Admin\Modules;
 Route::prefix("/manager")->group(function(){
     Route::prefix("/application")->group(function(){
@@ -30,5 +31,8 @@ Route::prefix("/manager")->group(function(){
             Route::post("/select", [Modules::class, "appSelectModule"])->name('m.module.select.submit');
         });
         Route::get("/document/{id}", [Applications::class, "docs"])->name('m.application.docs');
+    });
+    Route::prefix("/event")->group(function(){
+        Route::get("/", [Events::class, "index"])->name("m.events");
     });
 });
