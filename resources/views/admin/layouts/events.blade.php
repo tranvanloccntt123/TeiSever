@@ -23,7 +23,7 @@
                 </div>
             </td>
             <td>
-                <x-modal action="" method="POST" id='modal-delete-application-{{md5($data["events"][$i]["id"])}}' title="Xoá" modal-title="Hủy sự kiện" class-open-button="btn btn-danger" >
+                <x-modal action="url://" method="POST" id='modal-delete-application-{{md5($data["events"][$i]["id"])}}' title="Xoá" modal-title="Hủy sự kiện" class-open-button="btn btn-danger" >
                     @csrf
                     <input type="hidden" name="id" value="{{$data["events"][$i]["id"]}}">
                     <span><strong>Xoá Sự kiện</strong> sẽ không thể khôi phục lại</span>
