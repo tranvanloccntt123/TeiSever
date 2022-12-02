@@ -3,9 +3,6 @@
     {{$title}}
 </button>
 <form action="{{$action}}" method="{{$method}}" enctype="{{$enctype}}">
-    <!-- Config slot element -->
-    @props(['footer'])
-
     <!-- Modal -->
     <div class="modal fade" id="{{$id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="{{$id}}Label" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
