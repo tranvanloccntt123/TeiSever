@@ -7,7 +7,7 @@
                     <th>Ứng dụng</th>
                     <th>Loại ứng dụng</th>
                     <th class="row align-item-end">
-                        <x-modal action="{{route('m.applications.create.submit')}}" method="POST" id="modal-add-application" title="Thêm" modal-title="ĐĂNG KÝ">
+                        <x-modal action="{{route('m.applications.create.submit')}}" method="POST" id="modal-add-application" title="Thêm" modal-title="ĐĂNG KÝ" enctype="text/plain">
                             @csrf
                             <div class="mb-3">
                                 <label for="create-app-label" class="form-label">Tên ứng dụng <span style="color: red">*</span></label>
@@ -42,7 +42,7 @@
                         <td>
                             <a href="{{route('m.application.query',['id' => $data['applications'][$i]['id']])}}" class="btn btn-link">Truy xuất</a>
                             <a href="{{route('m.application.docs',['id' => $data['applications'][$i]['id']])}}" class="btn btn-link">Tài liệu</a>
-                            <x-modal action="{{route('m.applications.delete.submit')}}" method="POST" id='modal-delete-application-{{md5($data["applications"][$i]["id"])}}' title="Xoá" modal-title="Xoá ứng dụng" class-open-button="btn btn-danger" >
+                            <x-modal action="{{route('m.applications.delete.submit')}}" method="POST" id='modal-delete-application-{{md5($data["applications"][$i]["id"])}}' title="Xoá" enctype="text/plain" modal-title="Xoá ứng dụng" class-open-button="btn btn-danger" >
                                 @csrf
                                 <input type="hidden" name="id" value="{{$data["applications"][$i]["id"]}}">
                                 <span><strong>Xoá ứng dụng</strong> sẽ không thể khôi phục lại ứng dụng</span>
