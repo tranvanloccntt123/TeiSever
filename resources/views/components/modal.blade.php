@@ -1,5 +1,5 @@
 <!-- Button trigger modal -->
-<button type="button" class="{{$classOpenButton}}" data-bs-toggle="modal" data-bs-target="#{{$id}}">
+<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#{{$id}}">
     {{$title}}
 </button>
 <form action="{{$action}}" method="{{$method}}" enctype="{{$enctype}}">
