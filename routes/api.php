@@ -29,6 +29,7 @@ use App\Http\Controllers\API\v1\Post as Postv1;
 use App\Http\Controllers\API\v1\Profile as Profilev1;
 use App\Http\Controllers\API\v1\Events as Eventv1;
 use App\Http\Controllers\API\v1\RelationShip as RelationShipv1;
+use App\Http\Controllers\API\v1\TokenDevice as TokenDevicev1;
 Route::prefix('v1')->group(function(){
     Route::prefix('application')->group(function(){
         Route::post('create', [ApplicationControllerv1::class, 'create']);
@@ -90,6 +91,8 @@ Route::prefix('v1')->group(function(){
                 Route::get('get/from', [Eventv1::class, 'getScheduleFromDate']);
                 Route::post('delete', [Eventv1::class, 'deleteSchedule']);
             });
+
+            Route::prefix('register/device', [TokenDevicev1::class, 'sendTokenDevice']);
         });
         
         Route::prefix('auth')->group(function(){
@@ -100,8 +103,9 @@ Route::prefix('v1')->group(function(){
     
 });
 
-
+// LOG  109|89IBKWtxmnvlsLAhFOWOpjlRSQyAnCrJkU0kDQXl
 use App\Http\Controllers\FirebaseController;
+use App\Http\Controllers\CloudMessaginService;
 Route::prefix('firebase')->group(function(){
-    Route::get('test', [FirebaseController::class, 'test']);
+    Route::get('test', [CloudMessaginService::class, 'test']);
 });

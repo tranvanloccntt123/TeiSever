@@ -18,7 +18,6 @@ use App\Http\Resources\ChatResource;
 use Validator;
 use Auth;
 use DB;
-
 enum MessageType{
     case text;
     case image;
@@ -81,7 +80,6 @@ class Chat extends Controller
 
     public function getListMessage(Request $request){
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $listGroup = GroupMessageUserModel::where('group_message_user.user_id','=',$user->id)
             ->join('group_message','group_message.id', '=', 'group_message_user.group_message_id')
             ->join('users','users.id','=','group_message_user.user_id')
