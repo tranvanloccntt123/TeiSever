@@ -26,8 +26,6 @@ class ApplicationIsValid
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
-        $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         return $next($request);
     }
 }
