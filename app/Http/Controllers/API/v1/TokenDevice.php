@@ -24,10 +24,10 @@ class TokenDevice extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        $findToken = TokenDeviceModel::where('user_id', '=', $user->id)->where('devices', 'LIKE', $token)->first();
-        if(isset($findToken)) return APIResponse::FAIL(['device' => 'Đăng ký thiết bị thành công']);
-        TokenDeviceModel::insert(['user_id' => $user->id, 'devices' => $token]);
-        return APIResponse::FAIL(['device' => 'Đăng ký thiết bị thành công']);
+        $findToken = TokenDeviceModel::where('user_id', '=', $user->id)->where('devices', 'LIKE', $request->token)->first();
+        if(isset($findToken)) return APIResponse::SUCCESS(['device' => 'Đăng ký thiết bị thành công']);
+        TokenDeviceModel::insert(['user_id' => $user->id, 'devices' => $request->token]);
+        return APIResponse::SUCCESS(['device' => 'Đăng ký thiết bị thành công']);
     }
 
     public function clearTokenDevice(Request $request){
@@ -40,7 +40,7 @@ class TokenDevice extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        TokenDeviceModel::where('user_id', '=', $user->id)->where('device', 'LIKE', $token)->delete();
+        TokenDeviceModel::where('user_id', '=', $user->id)->where('device', 'LIKE', $request->token)->delete();
         return APIResponse::FAIL(['device' => 'Xóa thiết bị thành công']);
     }
 }
