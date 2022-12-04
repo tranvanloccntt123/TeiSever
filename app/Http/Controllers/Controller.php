@@ -15,7 +15,7 @@ enum StatusType{
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, FirebaseController, CloudMessaginService;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function getStatus($status){
         switch($status){
