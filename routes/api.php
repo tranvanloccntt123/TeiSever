@@ -92,7 +92,7 @@ Route::prefix('v1')->group(function(){
                 Route::post('delete', [Eventv1::class, 'deleteSchedule']);
             });
 
-            Route::prefix('register/device', [TokenDevicev1::class, 'sendTokenDevice']);
+            Route::post('register/device', [TokenDevicev1::class, 'sendTokenDevice']);
         });
         
         Route::prefix('auth')->group(function(){
