@@ -47,8 +47,8 @@ Route::prefix('v1')->group(function(){
         });
     });
 
-    Route::middleware('application_verified')->group(function(){
-        Route::middleware('auth:sanctum')->group(function(){
+    Route::middleware(['application_verified'])->group(function(){
+        Route::middleware(['auth:sanctum', 'user_verified'])->group(function(){
             Route::prefix('chat')->group(function(){
                 Route::get('list', [Chatv1::class, 'getListMessage']);
                 Route::get('messages', [Chatv1::class, 'getCurrentMessages']);
@@ -103,11 +103,4 @@ Route::prefix('v1')->group(function(){
         });
     });
     
-});
-
-// LOG  109|89IBKWtxmnvlsLAhFOWOpjlRSQyAnCrJkU0kDQXl
-use App\Http\Controllers\FirebaseController;
-use App\Http\Controllers\CloudMessaginService;
-Route::prefix('firebase')->group(function(){
-    Route::get('test', [CloudMessaginService::class, 'test']);
 });

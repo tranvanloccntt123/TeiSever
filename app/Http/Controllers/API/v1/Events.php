@@ -119,7 +119,6 @@ class Events extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $find = EventModel::where('day', '=', $request->day)
             ->whereRaw("TIMESTAMP(CONCAT(events.year, '-', events.month, '-', events.day, ' ', events.hour, ':', events.minute, ':00')) >= TIMESTAMP('".$request->year."-".$request->month."-".$request->day." ".$request->hour.":".$request->minute.":00')")
             ->leftJoin("event_users", "event_users.event_id", "=", "events.id")

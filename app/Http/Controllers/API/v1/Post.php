@@ -31,7 +31,6 @@ class Post extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $UUID = UUID::guidv4();
         if($request->has('media')){
             $path = 'post'; 
@@ -52,7 +51,6 @@ class Post extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $findPost = PostModel::where('UUID', 'LIKE', $request->uuid)->first();
         if(!isset($findPost)) return APIResponse::FAIL(["post" => "Không tìm thấy bài viết"]);
         if($request->has("content"))
@@ -81,7 +79,6 @@ class Post extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $find = PostModel::where('UUID', 'LIKE', $request->uuid)->first();
         if(isset($find)) $find->delete();
         return APIResponse::SUCCESS(['post' => 'Xóa thành công']);
@@ -89,7 +86,6 @@ class Post extends Controller
 
     public function list(Request $request){
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $user_id = $user->id;
         if($request->has('user_id'))
             $user_id = $request->user_id;
@@ -103,7 +99,6 @@ class Post extends Controller
 
     public function getMedia(Request $request){
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $user_id = $user->id;
         if($request->has('user_id'))
             $user_id = $request->user_id;

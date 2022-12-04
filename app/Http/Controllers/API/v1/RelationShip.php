@@ -43,7 +43,6 @@ class RelationShip extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $checkUserApplication = UserModel::find($request->friend);
         if(!isset($checkUserApplication) || $checkUserApplication->application_id != $request->application_id) return APIResponse::FAIL(['friend' => ['Không tìm thấy đối tượng']]);
         switch($request->status){
@@ -122,7 +121,6 @@ class RelationShip extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $findRelationShip = RelationShipModel::where('relationships.user_id', '=', $user->id)
         ->where("relationships.friend", "=", $request->user_id)->first();
         $relationStatus = -1;
@@ -152,7 +150,6 @@ class RelationShip extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $findRelationShip = RelationShipModel::where('user_id', '=', $user->id)->where('friend', '=', $request->user_id)->first();
         if(!isset($findRelationShip)) return APIResponse::FAIL(['relation' => ["Bạn cần phải kết bạn trước đó"]]);
         

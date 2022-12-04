@@ -38,7 +38,6 @@ class Profile extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $path = 'avatar';
         $UUID = UUID::guidv4();
         $name = $UUID.".jpg";
@@ -75,7 +74,6 @@ class Profile extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user) && $user->application_id != $request->application_id) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
         $path = 'background';
         $UUID = UUID::guidv4();
         $name = $UUID.".jpg";

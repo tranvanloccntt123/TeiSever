@@ -10,9 +10,9 @@ use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 class CloudMessaginService{
     public $tokens = [];
 
-    public function __construct(Messaging $messaging)
+    public function __construct()
     {
-        $this->messaging = $messaging;
+        $this->messaging = app('firebase.messaging');
     }
 
     public function setTokens($tokens){
