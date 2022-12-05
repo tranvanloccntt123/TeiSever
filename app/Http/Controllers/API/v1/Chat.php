@@ -46,7 +46,7 @@ class Chat extends Controller
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
-        $findGroupMessage = $this->chatCore->getOrCreateGroupMessage($request, $iser);
+        $findGroupMessage = $this->chatCore->getOrCreateGroupMessage($request, $user);
         if(isset($findGroupMessage))
             return APIResponse::SUCCESS(['room' => $findGroupMessage]);
         return APIResponse::FAIL(['room' => 'Không thể tìm thấy phòng chat']);
