@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\UUID;
+use App\Http\Controllers\Core\Event as EventCore;
 use Illuminate\Http\Request;
-use App\Models\Event as EventModel;
-use App\Models\EventUsers as EventUserModel;
-use App\Models\User as UserModel;
 use App\Http\Controllers\API\v1\Response as APIResponse;
 use App\Http\Resources\EventCollection;
 use Validator;
-use DB;
 class Events extends Controller
 {
+    private $eventCore;
+    public function __construct(){
+        $this->eventCore = new EventCore();
+    }
     //
     public function create(Request $request){
         $rule = [
@@ -38,22 +38,8 @@ class Events extends Controller
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
-        $uuid = UUID::guidv4();
-        $id = EventModel::insertGetId([
-            "application_id" => $request->application_id ,
-            "title" => $request->title, 
-            "description" => $request->description, 
-            "config" => $request->has('config')? $request->config : "{}", 
-            "day" => $request->day,
-            "month" => $request->month,
-            "year" => $request->year,
-            "hour" => $request->hour,
-            "minute" => $request->minute,
-            "UUID" => $uuid
-        ]);
-        foreach ($request->input('join') as $key => $value) {
-            EventUserModel::insert(['user_id' => $value, 'event_id' => $id]);
-        }
+        $uuid = $this->eventCore->create($request);
+        $this->getRealTime().sendEvents($request->application_id, $request->input('join'), $uuid);
         return APIResponse::SUCCESS(['UUID' => $uuid]);
     }
 
@@ -66,11 +52,7 @@ class Events extends Controller
         ];
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
-        $find = EventModel::where('UUID', 'LIKE', $request->uuid)
-            ->leftJoin("event_users", "event_users.event_id", "=", "events.id")
-            ->leftJoin("users", "event_users.user_id", "=", "users.id")
-            ->select("events.*", "users.name as name", "users.avatar", "event_users.user_id")
-            ->get();
+        $find = $this->eventCore->getDetail($request->uuid);
         return APIResponse::SUCCESS(new EventCollection($find));
     }
 
@@ -88,16 +70,7 @@ class Events extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        if(!isset($user)) return APIResponse::FAIL(['username' => ["Không tìm thấy thông tin của người dùng"]]);
-        //2022-11-13T15:38:13.000Z
-        $find = EventModel::where('day', '=', $request->day)
-            ->where('month', '=', $request->month)
-            ->where('year', '=', $request->year)
-            ->where('user_id', '=', $user->id)
-            ->leftJoin("event_users", "event_users.event_id", "=", "events.id")
-            ->leftJoin("users", "event_users.user_id", "=", "users.id")
-            ->select("events.*", "users.name as name", "users.avatar", "event_users.user_id")
-            ->get();
+        $find = $this->eventCore->getEventsInDay($user, $request->day, $request->month, $request->year);
         return APIResponse::SUCCESS(new EventCollection($find));
     }
 
@@ -119,12 +92,7 @@ class Events extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        $find = EventModel::where('day', '=', $request->day)
-            ->whereRaw("TIMESTAMP(CONCAT(events.year, '-', events.month, '-', events.day, ' ', events.hour, ':', events.minute, ':00')) >= TIMESTAMP('".$request->year."-".$request->month."-".$request->day." ".$request->hour.":".$request->minute.":00')")
-            ->leftJoin("event_users", "event_users.event_id", "=", "events.id")
-            ->leftJoin("users", "event_users.user_id", "=", "users.id")
-            ->select("events.*", "users.name as name", "users.avatar", "event_users.user_id")
-            ->get();
+        $find = $this->eventCore->getEventAtDate($user, $request->day, $request->month, $request->year, $request->hour, $request->minute);
         return APIResponse::SUCCESS(new EventCollection($find));
     }
 
@@ -138,9 +106,7 @@ class Events extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
-        $find = EventModel::where('UUID', 'LIKE', $request->uuid)->first();
-        if(!isset($find)) return APIResponse::FAIL(["event" => "Sự kiện không tồn tại"]);
-        EventUserModel::where('user_id', '=', $user->id)->where('event_id', '=', $find->id)->delete();
+        $this->eventCore->deleteEvent($user, $request->uuid);
         return APIResponse::SUCCESS(['event' => 'Xóa thành công sự kiện']);
     }
 }

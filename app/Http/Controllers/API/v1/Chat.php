@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\CloudMessaginService;
-use App\Http\Controllers\RealTimeService;
 use Illuminate\Http\Request;
 use App\Models\Message as MessageModel;
 use App\Http\Controllers\API\v1\Response as APIResponse;
@@ -24,15 +22,10 @@ enum MessageType{
 
 class Chat extends Controller
 {
-    private $cloudMessage;
-
-    private $realTime;
 
     private $chatCore;
 
     public function __construct(){
-        $this->cloudMessage = new CloudMessaginService();
-        $this->realTime = new RealTimeService();
         $this->chatCore = new ChatCore();
     }
 
@@ -103,7 +96,7 @@ class Chat extends Controller
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $uuid = $this->chatCore->sendMessage($request, $user);
         $users = $this->chatCore->getListUserInGroup($request->id);
-        $this->realTime->sendMessageInChat(
+        $this->getRealTime()->sendMessageInChat(
             $request->application_id, 
             $request->id, 
             $users, 

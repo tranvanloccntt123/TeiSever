@@ -41,4 +41,16 @@ class RealTimeService
             }
         }
     }
+
+    public function sendEvents($application_id, $join, $uuid){
+        foreach ($join as $key => $value) {
+            $this->push(
+                $this->getRootNotification($application_id, $value), 
+                [
+                    "type" => "schedule",
+                    "uuid" => $uuid
+                ]
+            );
+        }
+    }
 }
