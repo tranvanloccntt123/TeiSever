@@ -10,6 +10,7 @@ use App\Http\Resources\EventCollection;
 use Validator;
 class Events extends Controller
 {
+    public $isApi = true;
     private $eventCore;
     public function __construct(){
         $this->eventCore = new EventCore();
@@ -107,6 +108,6 @@ class Events extends Controller
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $user = $request->user();
         $this->eventCore->deleteEvent($user, $request->uuid);
-        return APIResponse::SUCCESS(['event' => 'Xóa thành công sự kiện']);
+        return APIResponse::SUCCESS(['event' => 'Xóa thành công sự kiện'], $this->isApi);
     }
 }

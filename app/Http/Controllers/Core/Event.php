@@ -15,7 +15,7 @@ class Event extends Controller
 {
     //
     public function create(Request $request){
-        $uuid = UUID::guidv4();
+        $uuid = $this->guidv4();
         $id = EventModel::insertGetId([
             "application_id" => $request->application_id ,
             "title" => $request->title, 
