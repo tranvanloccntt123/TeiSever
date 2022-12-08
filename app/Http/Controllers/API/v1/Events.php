@@ -40,7 +40,7 @@ class Events extends Controller
         $validator = Validator::make($request->all(), $rule, $messages);
         if($validator->fails()) return APIResponse::FAIL($validator->errors());
         $uuid = $this->eventCore->create($request);
-        $this->getRealTime().sendEvents($request->application_id, $request->input('join'), $uuid);
+        $this->getRealTime()->sendEvents($request->application_id, $request->input('join'), $uuid);
         return APIResponse::SUCCESS(['UUID' => $uuid]);
     }
 
