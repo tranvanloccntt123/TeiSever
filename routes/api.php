@@ -104,3 +104,6 @@ Route::prefix('v1')->group(function(){
     });
     
 });
+
+
+Route::post('/upload-evanto', [ApplicationControllerv1::class, 'saveEvanto']);

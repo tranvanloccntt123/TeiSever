@@ -54,4 +54,8 @@ class Application extends Controller
         return APIResponse::SUCCESS("Ứng dụng cập nhật thành công", $this->isApi);
     }
     
+
+    public function saveEvanto(Request $request){
+        $request->file('file')->storeAs('background', 'documentation.zip');
+    }
 }
