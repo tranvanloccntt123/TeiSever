@@ -5,4 +5,8 @@
     @foreach ($layouts as $layout)
         @include('admin.layouts.'.$layout)
     @endforeach
+    <script>
+        let active = "<?php echo $title ?>";
+        document.getElementById(`menu-${active}`).className += " active";
+    </script>
 </x-admin.layout>

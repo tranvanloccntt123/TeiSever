@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Config;
 use App\Models\Event as EventModel;
+use App\Models\EventUsers as EventUserModel;
 use App\Http\Resources\EventCollection;
 use App\Http\Controllers\API\v1\Events as EventAPI;
 use App\Http\Controllers\API\v1\Response as ResponseAPI;
+use App\Http\Controllers\Core\Event as EventCore;
 class Events extends Controller
 {
     private $title = "events";
@@ -22,7 +24,7 @@ class Events extends Controller
         $config = new Config();
         $config->title= $this->title;
         $config->data = [
-            "events" => EventModel::leftJoin("event_users", "event_users.event_id", "=", "events.id")
+            "events" => EventUserModel::leftJoin("events", "event_users.event_id", "=", "events.id")
             ->leftJoin("users", "event_users.user_id", "=", "users.id")
             ->select("events.*", "users.name as name", "users.avatar", "event_users.user_id")
             ->get()
@@ -36,8 +38,9 @@ class Events extends Controller
 
     public function delete(Request $request){
         $eventApi = new EventAPI();
-        $eventAp->isApi = false;
-        $result = $eventApi->deleteSchedule($request);
+        $eventApi->isApi = false;
+        (new EventCore())->deleteEventById($request->user_id, $request->id);
+        $result = ResponseAPI::SUCCESS(['events' => 'Xóa thành công'], false);
         return $this->returnBack($result);
     }
 }

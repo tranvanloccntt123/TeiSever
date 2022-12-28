@@ -1,6 +1,6 @@
 <ul class="menu-inner py-1">
   <!-- Dashboard -->
-  <li id="menu-application" class="menu-item active">
+  <li id="menu-applications" class="menu-item">
     <a href="{{route('m.applications')}}" class="menu-link">
       <i class="menu-icon tf-icons bx bx-home-circle"></i>
       <div data-i18n="Analytics">Ứng dụng</div>

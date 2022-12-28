@@ -71,4 +71,10 @@ class Event extends Controller
         if(!isset($find)) return APIResponse::FAIL(["event" => "Sự kiện không tồn tại"]);
         EventUserModel::where('user_id', '=', $user->id)->where('event_id', '=', $find->id)->delete();
     }
+
+    public function deleteEventById($userId, $eventId){
+        $find = EventModel::find($eventId);
+        if($find)
+            EventUserModel::where('user_id', '=', $userId)->where('event_id', '=', $eventId)->delete();
+    }
 }

@@ -23,9 +23,9 @@
                 </div>
             </td>
             <td>
-                <x-modal action="url://" method="POST" id='modal-delete-application-{{md5($data["events"][$i]["id"])}}' title="Xoá" modal-title="Hủy sự kiện" class-open-button="btn btn-danger" enctype="text/plain">
-                    @csrf
+                <x-modal action="{{route('m.events.delete.submit')}}" method="POST" id='modal-delete-application-{{md5($data["events"][$i]["id"])}}' title="Xoá" modal-title="Hủy sự kiện" class-open-button="btn btn-danger" enctype="application/json">
                     <input type="hidden" name="id" value="{{$data["events"][$i]["id"]}}">
+                    <input type="hidden" name="user_id" value="{{$data["events"][$i]["user_id"]}}">
                     <span><strong>Xoá Sự kiện</strong> sẽ không thể khôi phục lại</span>
                     <x-slot:footer>
                         <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">
